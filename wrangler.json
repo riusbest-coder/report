@@ -1,5 +1,6 @@
-{
-  "name": "report",
-  "main": "src/index.js",
-  "compatibility_date": "2026-10-01"
-}
+export default {
+  async fetch(request, env, ctx) {
+    // Trỏ Worker tự động phục vụ các tệp giao diện (HTML/CSS/JS) trong assets
+    return env.ASSETS.fetch(request);
+  },
+};
