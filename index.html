@@ -2,53 +2,117 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Form Lưu Dữ Liệu Vào 4 Sheet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Cáo Tiến Độ Work</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 600px; }
+    .form-group { margin-bottom: 15px; }
+    label { font-weight: bold; display: block; margin-bottom: 5px; }
+    input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+    button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+    button:disabled { background-color: #ccc; }
+    #statusMessage { font-weight: bold; margin-top: 15px; }
+  </style>
 </head>
 <body>
 
-  <h2>Gửi thông tin dữ liệu</h2>
+  <h2>Gửi Báo Cáo Vào Google Sheet</h2>
 
-  <form id="multiSheetForm">
-    <!-- Lựa chọn 1 trong 4 Sheet -->
-    <label for="sheetSelect"><b>Chọn danh mục cần lưu:</b></label><br>
-    <select id="sheetSelect" required>
-      <option value="Sheet1">Sheet 1: Doanh Thu</option>
-      <option value="Sheet2">Sheet 2: Khách Hàng</option>
-      <option value="Sheet3">Sheet 3: Kho Hàng</option>
-      <option value="Sheet4">Sheet 4: Góp Ý</option>
-    </select>
-    <br><br>
+  <form id="reportForm">
+    <div class="form-group">
+      <label for="sheetSelect">Chọn danh mục báo cáo:</label>
+      <select id="sheetSelect" onchange="updateFormFields()">
+        <option value="绩效目标达进展">1. Tiến độ mục tiêu KPI (绩效目标达进展)</option>
+        <option value="客户跟进情况">2. Chăm sóc khách hàng (客户跟进情况)</option>
+        <option value="下月重点工作">3. Công việc trọng tâm tháng tới (下月重点工作)</option>
+        <option value="卡点 / 异常问题讨论">4. Thảo luận vấn đề / Điểm nghẽn (卡点 / 异常问题讨论)</option>
+      </select>
+    </div>
 
-    <input type="text" id="HoTen" placeholder="Họ và tên" required><br><br>
-    <input type="email" id="Email" placeholder="Email" required><br><br>
-    <input type="text" id="SoDienThoai" placeholder="Số điện thoại"><br><br>
-    <textarea id="NoiDung" placeholder="Nội dung/Chi tiết"></textarea><br><br>
+    <!-- Các ô nhập động thay đổi theo Sheet chọn -->
+    <div id="dynamicFields"></div>
 
-    <button type="submit" id="submitBtn">Gửi dữ liệu</button>
+    <button type="submit" id="submitBtn">Gửi báo cáo</button>
   </form>
 
-  <p id="statusMessage" style="font-weight: bold; color: green;"></p>
+  <p id="statusMessage"></p>
 
   <script>
-    // DÁN URL WEB APP LẤY Ở BƯỚC 3 VÀO ĐÂY
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbJJm6Wm8qePQhlhhe4nowhYKpkiy4XC18INyVntsJ9EeSQWGly7eAei9TDl4Amv2wBA/exec';
+    // DÁN URL WEB APP CỦA BẠN VÀO ĐÂY
+    const GOOGLE_SCRIPT_URL = 'DÁN_WEB_APP_URL_TỪ_APPS_SCRIPT_VÀO_ĐÂY';
 
-    document.getElementById('multiSheetForm').addEventListener('submit', function(e) {
+    // Tự động thay đổi giao diện nhập liệu theo Sheet chọn
+    function updateFormFields() {
+      const selectedSheet = document.getElementById('sheetSelect').value;
+      const fieldsDiv = document.getElementById('dynamicFields');
+      
+      if (selectedSheet === '绩效目标达进展') {
+        fieldsDiv.innerHTML = `
+          <div class="form-group">
+            <label>Tên chỉ số (指标名称):</label>
+            <input type="text" id="col1" required>
+          </div>
+          <div class="form-group">
+            <label>Chỉ tiêu / Mục tiêu (目标值):</label>
+            <input type="text" id="col2" required>
+          </div>
+          <div class="form-group">
+            <label>Thực tế hoàn thành (实际完成值):</label>
+            <input type="text" id="col3" required>
+          </div>
+          <div class="form-group">
+            <label>Tiến độ达成进度 (%):</label>
+            <input type="text" id="col4">
+          </div>
+          <div class="form-group">
+            <label>Giải trình lệch / Hành động cải tiến (偏差说明 / 改进动作):</label>
+            <textarea id="col5" rows="3"></textarea>
+          </div>
+        `;
+      } else {
+        fieldsDiv.innerHTML = `
+          <div class="form-group">
+            <label>Nội dung 1 / Tên công việc / Khách hàng:</label>
+            <input type="text" id="col1" required>
+          </div>
+          <div class="form-group">
+            <label>Nội dung 2 / Chi tiết:</label>
+            <input type="text" id="col2">
+          </div>
+          <div class="form-group">
+            <label>Nội dung 3 / Tiến độ / Trạng thái:</label>
+            <input type="text" id="col3">
+          </div>
+          <div class="form-group">
+            <label>Ghi chú / Đề xuất:</label>
+            <textarea id="col4" rows="3"></textarea>
+          </div>
+        `;
+      }
+    }
+
+    // Khởi tạo phom ban đầu
+    updateFormFields();
+
+    // Xử lý gửi form
+    document.getElementById('reportForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
       const submitBtn = document.getElementById('submitBtn');
       const statusMsg = document.getElementById('statusMessage');
+      const selectedSheet = document.getElementById('sheetSelect').value;
 
       submitBtn.disabled = true;
+      statusMsg.style.color = 'blue';
       statusMsg.innerText = 'Đang gửi dữ liệu...';
 
-      // Lấy dữ liệu form cùng tên Sheet được chọn
       const dataToSend = {
-        sheetName: document.getElementById('sheetSelect').value,
-        HoTen: document.getElementById('HoTen').value,
-        Email: document.getElementById('Email').value,
-        SoDienThoai: document.getElementById('SoDienThoai').value,
-        NoiDung: document.getElementById('NoiDung').value
+        sheetName: selectedSheet,
+        col1: document.getElementById('col1') ? document.getElementById('col1').value : '',
+        col2: document.getElementById('col2') ? document.getElementById('col2').value : '',
+        col3: document.getElementById('col3') ? document.getElementById('col3').value : '',
+        col4: document.getElementById('col4') ? document.getElementById('col4').value : '',
+        col5: document.getElementById('col5') ? document.getElementById('col5').value : ''
       };
 
       fetch(GOOGLE_SCRIPT_URL, {
@@ -58,12 +122,15 @@
         body: JSON.stringify(dataToSend)
       })
       .then(() => {
-        statusMsg.innerText = 'Đã lưu thành công vào tab "' + dataToSend.sheetName + '"!';
-        document.getElementById('multiSheetForm').reset();
+        statusMsg.style.color = 'green';
+        statusMsg.innerText = 'Lưu thành công vào tab "' + selectedSheet + '"!';
+        document.getElementById('reportForm').reset();
+        updateFormFields();
         submitBtn.disabled = false;
       })
       .catch(error => {
         console.error('Lỗi:', error);
+        statusMsg.style.color = 'red';
         statusMsg.innerText = 'Có lỗi xảy ra, vui lòng thử lại!';
         submitBtn.disabled = false;
       });
