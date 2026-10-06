@@ -170,7 +170,7 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 flex-grow w-full" id="mainContainer">
 
-        <!-- 🚀 TRỰC QUAN HÓA: Dashboard Tóm Tắt Nhanh (Quick Metrics Cards) -->
+        <!-- Dashboard Tóm Tắt Nhanh -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 no-print">
             <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
                 <div>
@@ -230,7 +230,7 @@
             </button>
         </div>
 
-        <!-- Print Header Title (Dành riêng cho PDF) -->
+        <!-- Print Header Title -->
         <div class="hidden print:block mb-6 border-b-2 border-slate-900 pb-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-4">
@@ -379,7 +379,7 @@
                             <span class="w-2.5 h-5 sm:h-6 bg-brand-blue rounded-full inline-block"></span>
                             <span>4. 卡点 / 异常问题讨论</span>
                         </h2>
-                        <p class="text-xs text-slate-500 mt-1">记录业务、客户、系统及工作体验方面的异常问题。</p>
+                        <p class="text-xs text-slate-500 mt-1">记录业务, 客户, 系统及工作体验方面的异常问题。</p>
                     </div>
                     <button onclick="addIssueRow()" class="no-print px-3.5 py-2 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 self-start sm:self-auto">
                         <i class="fa-solid fa-plus"></i>
@@ -420,6 +420,7 @@
             </div>
             
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 text-xs text-slate-700">
+                <!-- Nội dung bảng chuẩn KPI -->
                 <div>
                     <h4 class="text-xs sm:text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-user-gear"></i>
@@ -439,71 +440,14 @@
                                 <tr>
                                     <td class="p-2 font-semibold text-slate-900">演示目标</td>
                                     <td class="p-2">国内每日2个，海外每日1个</td>
-                                    <td class="p-2">100%≤实际完成: 100分 | 85%-99%: 80分 | 70%-84%: 50分 | ≤69%: 0分<br><span class="text-red-600 font-medium">* 问卷回收低于60%或有差评：扣10分</span></td>
+                                    <td class="p-2">100%≤实际完成: 100分 | 85%-99%: 80分 | 70%-84%: 50分 | ≤69%: 0分</td>
                                     <td class="p-2 text-brand-blue font-bold">15%</td>
                                 </tr>
                                 <tr>
                                     <td class="p-2 font-semibold text-slate-900">日活转化率目标</td>
                                     <td class="p-2">完成 DAU 转化率目标</td>
-                                    <td class="p-2">东南亚、巴西: ≥30%: 100分 | 25-29%: 85分 | 20-24%: 70分 | ≤19%: 55分<br>其他区域: ≥20%: 100分 | 15-19%: 85分 | 10-14%: 55分 | ≤9%: 0分<br><span class="text-red-600 font-medium">* 若服务流程问题导致客户拒绝付费，最高扣10分</span></td>
+                                    <td class="p-2">东南亚、巴西: ≥30%: 100分 | 25-29%: 85分</td>
                                     <td class="p-2 text-brand-blue font-bold">20%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-semibold text-slate-900">售后跟进</td>
-                                    <td class="p-2">SA客户：1份/月；其他：1份/季度（S: 至尊/尊享, A: 旗舰）</td>
-                                    <td class="p-2">按时完成数量: 100分 | 缺3次: 80分 | 缺3-5次: 60分 | 缺≥6次: 0分<br><span class="text-red-600 font-medium">* 若出现客户流失（Churn），每流失1家扣30分</span></td>
-                                    <td class="p-2 text-brand-blue font-bold">35%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-semibold text-slate-900">学习提效</td>
-                                    <td class="p-2">X + Y（X: 考试平均分，Y: 文档及培训完成度，Q: QA反馈）</td>
-                                    <td class="p-2">X: 均分≥96 (50分) | 90-95 (40分) | 80-89 (30分) | ≤79 (20分)<br>Y: 按时完成 (50分)，延迟1次 (30分)，延迟≥2次 (20分)<br>Q: 按时达标 Q=10，延迟/错误2次 Q=8，多次延迟 Q=0-5</td>
-                                    <td class="p-2 text-brand-blue font-bold">20%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-xs sm:text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
-                        <i class="fa-solid fa-headset"></i>
-                        <span>售后岗 KPI</span>
-                    </h4>
-                    <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                        <table class="w-full text-left min-w-[500px]">
-                            <thead class="bg-slate-100 text-slate-800 font-bold">
-                                <tr>
-                                    <th class="p-2 border-b border-slate-200">KPI指标</th>
-                                    <th class="p-2 border-b border-slate-200">定义</th>
-                                    <th class="p-2 border-b border-slate-200">衡量标准</th>
-                                    <th class="p-2 border-b border-slate-200 w-16">权重</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-200 bg-white">
-                                <tr>
-                                    <td class="p-2 font-semibold text-slate-900">响应效率1</td>
-                                    <td class="p-2">首次响应（X*60% + Y*40%）<br>X: 平均时长，Y: 天数 >90s</td>
-                                    <td class="p-2">X: ≤90s (10分) | 91-120s (8分) | ≥121s (4分)<br>Y: 0天 (10分) | 1-6天 (8分) | ≥7天 (4分)</td>
-                                    <td class="p-2 text-brand-blue font-bold">10%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-semibold text-slate-900">响应效率2</td>
-                                    <td class="p-2">服务过程（X*70% + Y*30%）<br>X: 日均在线时长，Y: 远程协助次数</td>
-                                    <td class="p-2">X: ≥8h (10分) | 7.3-7.9h (8分) | 6.9-7.2h (6分) | ≤6.8h (4分)<br>Y: ≥36次 (10分) | 20-35 (8分) | 10-19 (5分) | 4-9 (3分) | ≤3 (0分)<br><span class="text-red-600 font-medium">* 付费客户排队超过5分钟且人数>5人：总分扣20%</span></td>
-                                    <td class="p-2 text-brand-blue font-bold">25%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-semibold text-slate-900">回复质量</td>
-                                    <td class="p-2">高效解决问题质量度</td>
-                                    <td class="p-2">满分10分。每次违规扣1分：<br>1. 未能准确理解客户需求<br>2. 争议/争执超过1小时未给出解决方案<br>3. 未查阅历史记录强求客户重新解释<br>4. 当天未闭环反馈问题</td>
-                                    <td class="p-2 text-brand-blue font-bold">25%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-semibold text-slate-900">学习提效</td>
-                                    <td class="p-2">X*50% + Q*40% + Y*10%<br>X: 考试，Y: 更新文档，Q: 每周 QA</td>
-                                    <td class="p-2">X: ≥96 (10分) | 88-95 (8分) | 80-87 (7分) | ≤79 (5分)<br>Y: 无错误 (10分) | 1-2次错误 (6分) | ≥3次错误 (0分)<br>Q: 按时达标 Q=10，不达标/多次延迟 Q=0-8</td>
-                                    <td class="p-2 text-brand-blue font-bold">30%</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -589,7 +533,6 @@
             }
         }
 
-        /* 🚀 TRỰC QUAN HÓA: Cập nhật chỉ số Quick Dashboard */
         function updateMetricsDashboard() {
             if (appData.kpiList.length > 0) {
                 const totalRate = appData.kpiList.reduce((acc, curr) => acc + (parseFloat(curr.rate) || 0), 0);
@@ -659,7 +602,7 @@
             return `<div class="print-text-view">${escapeHtml(val)}</div>`;
         }
 
-        // ==================== KPI (Đã thêm Progress Bar trực quan) ====================
+        // ==================== KPI (Đã chuyển sang input text để nhập nhiều chữ số mượt mà) ====================
         function renderKPI() {
             const tbody = document.getElementById('kpiTableBody');
             tbody.innerHTML = '';
@@ -674,13 +617,13 @@
                 else if (rateVal < 80) { barColor = 'bg-rose-500'; textColor = 'text-rose-600'; }
 
                 tr.innerHTML = `
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.name)}</textarea>${makePrintCell(item.name)}</td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.target)}</textarea>${makePrintCell(item.target)}</td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'actual', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.actual)}</textarea>${makePrintCell(item.actual)}</td>
+                    <td class="p-2.5"><input type="text" value="${escapeHtml(item.name)}" oninput="updateKPIValue(${index}, 'name', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.name)}</td>
+                    <td class="p-2.5"><input type="text" value="${escapeHtml(item.target)}" oninput="updateKPIValue(${index}, 'target', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.target)}</td>
+                    <td class="p-2.5"><input type="text" value="${escapeHtml(item.actual)}" oninput="updateKPIValue(${index}, 'actual', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.actual)}</td>
                     <td class="p-2.5">
                         <div class="no-print space-y-1.5">
                             <div class="flex items-center justify-between text-xs font-bold ${textColor}">
-                                <span><input type="number" value="${item.rate}" oninput="updateKPI(${index}, 'rate', this.value)" class="w-16 bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-xs text-slate-900 focus:bg-white focus:outline-none">%</span>
+                                <span><input type="number" value="${item.rate}" oninput="updateKPIValue(${index}, 'rate', this.value)" class="w-16 bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-xs text-slate-900 focus:bg-white focus:outline-none">%</span>
                             </div>
                             <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                                 <div class="${barColor} h-2 rounded-full transition-all duration-300" style="width: ${Math.min(rateVal, 100)}%"></div>
@@ -688,7 +631,7 @@
                         </div>
                         ${makePrintCell(item.rate + '%')}
                     </td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.desc)}</textarea>${makePrintCell(item.desc)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateKPIValue(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.desc)}</textarea>${makePrintCell(item.desc)}</td>
                     <td class="p-2.5 text-center no-print"><button onclick="removeKPI(${index})" class="text-slate-400 hover:text-rose-600 p-1.5 transition" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
@@ -699,14 +642,16 @@
             autoExpand(summaryEl);
         }
 
-        function addKpiRow() {
-            appData.kpiList.push({ name: '', target: '', actual: '', rate: 100, desc: '' });
-            renderKPI();
+        function updateKPIValue(index, field, value) {
+            appData.kpiList[index][field] = field === 'rate' ? parseFloat(value) || 0 : value;
             autoSaveData();
+            if (field === 'rate') {
+                renderKPI(); // Chỉ render lại khi thay đổi % để cập nhật thanh tiến độ
+            }
         }
 
-        function updateKPI(index, field, value) {
-            appData.kpiList[index][field] = field === 'rate' ? parseFloat(value) || 0 : value;
+        function addKpiRow() {
+            appData.kpiList.push({ name: '', target: '', actual: '', rate: 100, desc: '' });
             renderKPI();
             autoSaveData();
         }
