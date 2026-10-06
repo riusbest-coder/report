@@ -83,19 +83,6 @@
                 background-color: #ffffff !important;
                 color: #000000 !important;
             }
-            .print-all-tabs .tab-content {
-                display: block !important;
-                margin-bottom: 0 !important;
-                /* ÉP MỖI PHẦN / TAB RA 1 TRANG RIÊNG */
-                break-before: page;
-                page-break-before: always;
-            }
-            /* Phần đầu tiên (Tab 1) không tạo trang trống ở đầu */
-            .print-all-tabs #tab1 {
-                break-before: auto;
-                page-break-before: auto;
-            }
-
             .print-card {
                 background: white !important;
                 border: 1px solid #cbd5e1 !important;
@@ -282,6 +269,7 @@
                     <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50/80 border-b border-slate-200 font-bold">
                             <tr>
+                                <th scope="col" class="px-2 py-3.5 w-12 text-center no-print">排序</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[18%] min-w-[140px]">指标名称</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[12%] min-w-[90px]">目标值</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[12%] min-w-[90px]">实际完成值</th>
@@ -326,6 +314,7 @@
                     <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50/80 border-b border-slate-200 font-bold">
                             <tr>
+                                <th scope="col" class="px-2 py-3.5 w-12 text-center no-print">排序</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[20%] min-w-[130px]">客户名称</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[25%] min-w-[160px]">客户画像</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[25%] min-w-[180px]">最新动态</th>
@@ -369,6 +358,7 @@
                     <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50/80 border-b border-slate-200 font-bold">
                             <tr>
+                                <th scope="col" class="px-2 py-3.5 w-12 text-center no-print">排序</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[35%] min-w-[200px]">重点工作说明</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[30%] min-w-[180px]">目标 / 交付物</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[30%] min-w-[180px]">需求支持/协同</th>
@@ -402,6 +392,7 @@
                     <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50/80 border-b border-slate-200 font-bold">
                             <tr>
+                                <th scope="col" class="px-2 py-3.5 w-12 text-center no-print">排序</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[15%] min-w-[110px]">问题分类</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[30%] min-w-[180px]">问题描述</th>
                                 <th scope="col" class="px-3.5 py-3.5 w-[25%] min-w-[180px]">影响与已尝试措施</th>
@@ -719,25 +710,55 @@
             modal.classList.toggle('hidden');
         }
 
+        // ==================== XUẤT PDF / IN ÉP MỖI TAB 1 TRANG ====================
         function printAllTabs() {
-            const mainContainer = document.getElementById('mainContainer');
-            mainContainer.classList.add('print-all-tabs');
-            
-            const allTabs = document.querySelectorAll('.tab-content');
-            allTabs.forEach(tab => tab.classList.remove('hidden'));
+            // Thêm style ngắt trang tức thời
+            let styleEl = document.getElementById('force-page-break-style');
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = 'force-page-break-style';
+                document.head.appendChild(styleEl);
+            }
+            styleEl.innerHTML = `
+                @media print {
+                    .tab-content {
+                        display: block !important;
+                    }
+                    #tab2, #tab3, #tab4 {
+                        break-before: page !important;
+                        page-break-before: always !important;
+                    }
+                }
+            `;
 
             triggerAllAutoExpand();
 
             setTimeout(() => {
                 window.print();
-                mainContainer.classList.remove('print-all-tabs');
-                allTabs.forEach(tab => {
+                // Dọn dẹp sau khi in xong
+                styleEl.innerHTML = '';
+                document.querySelectorAll('.tab-content').forEach(tab => {
                     if (tab.id !== currentActiveTab) {
                         tab.classList.add('hidden');
                     }
                 });
                 triggerAllAutoExpand();
             }, 150);
+        }
+
+        function moveRow(listName, index, direction) {
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= appData[listName].length) return;
+            
+            const temp = appData[listName][index];
+            appData[listName][index] = appData[listName][targetIndex];
+            appData[listName][targetIndex] = temp;
+            
+            autoSaveData();
+            if (listName === 'kpiList') renderKPI();
+            if (listName === 'customerList') renderCustomers();
+            if (listName === 'taskList') renderTasks();
+            if (listName === 'issueList') renderIssues();
         }
 
         function makePrintCell(val, id) {
@@ -792,6 +813,10 @@
                 else if (rateVal < 80) { barColor = 'bg-rose-500'; textColor = 'text-rose-600'; }
 
                 tr.innerHTML = `
+                    <td class="p-2 text-center no-print whitespace-nowrap">
+                        <button onclick="moveRow('kpiList', ${index}, -1)" class="p-1 text-slate-400 hover:text-brand-blue ${index === 0 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                        <button onclick="moveRow('kpiList', ${index}, 1)" class="p-1 text-slate-400 hover:text-brand-blue ${index === appData.kpiList.length - 1 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === appData.kpiList.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                    </td>
                     <td class="p-2.5"><input type="text" value="${escapeHtml(item.name)}" oninput="updateKPIValue(${index}, 'name', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.name, `pv_kpi_name_${index}`)}</td>
                     <td class="p-2.5"><input type="text" value="${escapeHtml(item.target)}" oninput="updateKPIValue(${index}, 'target', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.target, `pv_kpi_target_${index}`)}</td>
                     <td class="p-2.5"><input type="text" value="${escapeHtml(item.actual)}" oninput="updateKPIValue(${index}, 'actual', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.actual, `pv_kpi_actual_${index}`)}</td>
@@ -878,6 +903,10 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
                 tr.innerHTML = `
+                    <td class="p-2 text-center no-print whitespace-nowrap">
+                        <button onclick="moveRow('customerList', ${index}, -1)" class="p-1 text-slate-400 hover:text-brand-blue ${index === 0 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                        <button onclick="moveRow('customerList', ${index}, 1)" class="p-1 text-slate-400 hover:text-brand-blue ${index === appData.customerList.length - 1 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === appData.customerList.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                    </td>
                     <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-900 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.name)}</textarea>${makePrintCell(item.name, `pv_cus_name_${index}`)}</td>
                     <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'profile', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.profile)}</textarea>${makePrintCell(item.profile, `pv_cus_profile_${index}`)}</td>
                     <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'status', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.status)}</textarea>${makePrintCell(item.status, `pv_cus_status_${index}`)}</td>
@@ -918,6 +947,10 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
                 tr.innerHTML = `
+                    <td class="p-2 text-center no-print whitespace-nowrap">
+                        <button onclick="moveRow('taskList', ${index}, -1)" class="p-1 text-slate-400 hover:text-brand-blue ${index === 0 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                        <button onclick="moveRow('taskList', ${index}, 1)" class="p-1 text-slate-400 hover:text-brand-blue ${index === appData.taskList.length - 1 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === appData.taskList.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                    </td>
                     <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'title', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.title)}</textarea>${makePrintCell(item.title, `pv_task_title_${index}`)}</td>
                     <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.target)}</textarea>${makePrintCell(item.target, `pv_task_target_${index}`)}</td>
                     <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.support)}</textarea>${makePrintCell(item.support, `pv_task_support_${index}`)}</td>
@@ -953,6 +986,10 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
                 tr.innerHTML = `
+                    <td class="p-2 text-center no-print whitespace-nowrap">
+                        <button onclick="moveRow('issueList', ${index}, -1)" class="p-1 text-slate-400 hover:text-brand-blue ${index === 0 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                        <button onclick="moveRow('issueList', ${index}, 1)" class="p-1 text-slate-400 hover:text-brand-blue ${index === appData.issueList.length - 1 ? 'opacity-30 cursor-not-allowed' : ''}" ${index === appData.issueList.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                    </td>
                     <td class="p-2.5">
                         <select onchange="updateIssue(${index}, 'category', this.value)" class="category-select w-full bg-amber-50/80 border border-amber-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-amber-800 focus:bg-white focus:border-amber-500 focus:outline-none transition">
                             <option value="业务" ${item.category === '业务' ? 'selected' : ''}>📌 业务</option>
