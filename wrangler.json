@@ -1,7 +1,5 @@
 {
   "name": "report",
   "main": "src/index.js",
-  "assets": {
-    "directory": "./"
-  }
+  "compatibility_date": "2026-10-01"
 }
