@@ -68,7 +68,6 @@
             padding-right: 1.8rem !important;
         }
 
-        /* Khung hiển thị text dành riêng cho bản in PDF */
         .print-text-view {
             display: none;
             white-space: pre-wrap;
@@ -76,7 +75,6 @@
             line-height: 1.4;
         }
 
-        /* Tối ưu khi xuất PDF */
         @media print {
             .no-print {
                 display: none !important;
@@ -157,6 +155,12 @@
                         <i class="fa-solid fa-circle-check"></i>
                         <span>已实时保存</span>
                     </div>
+
+                    <!-- NÚT LƯU VÀO GOOGLE SHEET / EXCEL -->
+                    <button onclick="saveToGoogleSheet()" id="btnSaveExcel" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-emerald-600/20 shrink-0">
+                        <i class="fa-solid fa-file-excel"></i>
+                        <span>Lưu vào Excel (Google Sheet)</span>
+                    </button>
 
                     <button onclick="printAllTabs()" class="px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-brand-blue/20 shrink-0">
                         <i class="fa-solid fa-file-pdf"></i>
@@ -420,7 +424,6 @@
             </div>
             
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 text-xs text-slate-700">
-                <!-- Nội dung bảng chuẩn KPI -->
                 <div>
                     <h4 class="text-xs sm:text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-user-gear"></i>
@@ -471,6 +474,9 @@
     </footer>
 
     <script>
+        // DÁN URL WEB APP APPS SCRIPT CỦA BẠN VÀO ĐÂY
+        const GOOGLE_SCRIPT_URL = '[DÁN_WEB_APP_URL_TỪ_APPS_SCRIPT_VÀO_ĐÂY](https://script.google.com/macros/s/AKfycbzRnCPmP3C3l3ysh-_IezJtqYg5vfW7-DOk1I7iyu2cp8unpHHJjQZziO5kwArtJwcqJw/exec)';
+
         const initialData = {
             kpiList: [
                 { name: '演示目标', target: '100%', actual: '95%', rate: 95, desc: '达到越南市场演示目标的 95%。' },
@@ -602,7 +608,34 @@
             return `<div class="print-text-view">${escapeHtml(val)}</div>`;
         }
 
-        // ==================== KPI (Đã tối ưu DOM để không bị mất focus khi gõ nhiều số) ====================
+        // ==================== HÀM LƯU DỮ LIỆU SANG GOOGLE SHEET / EXCEL ====================
+        function saveToGoogleSheet() {
+            const btn = document.getElementById('btnSaveExcel');
+            const originalText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Đang lưu...</span>`;
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(appData)
+            })
+            .then(() => {
+                alert('Đã lưu thành công toàn bộ dữ liệu vào file Google Sheet/Excel!');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            })
+            .catch(error => {
+                console.error('Lỗi:', error);
+                alert('Có lỗi xảy ra khi lưu dữ liệu!');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            });
+        }
+
+        // ==================== KPI ====================
         function renderKPI() {
             const tbody = document.getElementById('kpiTableBody');
             tbody.innerHTML = '';
