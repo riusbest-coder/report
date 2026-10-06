@@ -126,7 +126,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo & Info -->
-                <div class="flex items-center space-x-4 lg:space-x-6">
+                <div class="flex items-center space-x-6">
                     <div class="flex items-center space-x-3">
                         <div class="bg-brand-blue/10 p-2.5 rounded-xl border border-brand-blue/20 flex items-center justify-center shrink-0">
                             <i class="fa-solid fa-robot text-brand-blue text-2xl"></i>
@@ -137,21 +137,13 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center space-x-3 text-xs lg:text-sm border-l border-slate-200 pl-4 lg:pl-6 h-8">
-                        <!-- Select Chọn Tháng Tiếng Trung -->
+                    <div class="flex items-center space-x-4 text-xs lg:text-sm border-l border-slate-200 pl-6 h-8">
                         <div class="flex items-center space-x-1.5 shrink-0">
-                            <i class="fa-solid fa-calendar-days text-brand-blue"></i>
-                            <span class="text-slate-500 font-medium hidden sm:inline">汇报月份：</span>
-                            <select id="monthSelect" onchange="onMonthChange(this.value)" class="bg-slate-100 hover:bg-slate-200 text-brand-blue font-bold px-2 py-1 rounded-lg border border-slate-300 focus:outline-none cursor-pointer text-xs sm:text-sm transition">
-                            </select>
-                        </div>
-
-                        <div class="hidden md:flex items-center space-x-1.5 shrink-0">
-                            <i class="fa-solid fa-earth-asia text-slate-400"></i>
+                            <i class="fa-solid fa-earth-asia text-brand-blue"></i>
                             <span class="text-slate-500 font-medium">区域：</span>
                             <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">越南</span>
                         </div>
-                        <div class="hidden md:flex items-center space-x-1.5 shrink-0">
+                        <div class="flex items-center space-x-1.5 shrink-0">
                             <i class="fa-solid fa-user-tie text-slate-400"></i>
                             <span class="text-slate-500 font-medium">汇报人：</span>
                             <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">阮红云</span>
@@ -160,18 +152,13 @@
                 </div>
 
                 <!-- Right Actions & Auto-save Status -->
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <button onclick="copyPrevMonthData()" title="复制上月数据" class="hidden xl:flex items-center space-x-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition border border-slate-300">
-                        <i class="fa-solid fa-copy text-brand-blue"></i>
-                        <span>复制上月数据</span>
-                    </button>
-
+                <div class="flex items-center space-x-3 sm:space-x-4">
                     <div class="hidden sm:flex items-center space-x-1.5 text-xs text-emerald-600 font-semibold bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200" id="headerSaveStatus">
                         <i class="fa-solid fa-circle-check"></i>
                         <span>已实时保存</span>
                     </div>
 
-                    <button onclick="printAllTabs()" class="px-3.5 py-2 bg-brand-blue hover:bg-blue-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-brand-blue/20 shrink-0">
+                    <button onclick="printAllTabs()" class="px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-brand-blue/20 shrink-0">
                         <i class="fa-solid fa-file-pdf"></i>
                         <span>打印 / 导出 PDF</span>
                     </button>
@@ -252,11 +239,10 @@
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold text-slate-900">店小秘 - 海外实施月度例会报告</h1>
-                        <p class="text-xs text-slate-600 mt-1">店小秘 ERP 海外实施月度例会报告 (<span id="printMonthText"></span>)</p>
+                        <p class="text-xs text-slate-600 mt-1">店小秘 ERP 海外实施月度例会报告</p>
                     </div>
                 </div>
                 <div class="text-right text-xs text-slate-800">
-                    <p><strong>汇报月份：</strong> <span id="printMonthValue"></span></p>
                     <p><strong>区域：</strong> 越南</p>
                     <p><strong>汇报人：</strong> 阮红云</p>
                     <p><strong>报告导出日期：</strong> <span id="printDate"></span></p>
@@ -485,7 +471,7 @@
     </footer>
 
     <script>
-        const defaultDataTemplate = {
+        const initialData = {
             kpiList: [
                 { name: '演示目标', target: '100%', actual: '95%', rate: 95, desc: '达到越南市场演示目标的 95%。' },
                 { name: '日活转化率', target: '30%', actual: '28%', rate: 93.3, desc: '东南亚区域需在下阶段加速推进。' },
@@ -508,111 +494,13 @@
             ]
         };
 
-        const STORAGE_KEY_PREFIX = 'dianxiaomi_report_';
-        let currentMonthKey = ''; // Ví dụ: '2026年10月'
-        let appData = {};
+        let appData = JSON.parse(localStorage.getItem('dianxiaomi_report_data')) || initialData;
         let currentActiveTab = 'tab1';
 
         window.onload = function() {
             document.getElementById('printDate').innerText = new Date().toLocaleDateString('zh-CN');
-            initMonthSelect();
-            loadMonthData(currentMonthKey);
-        };
-
-        // Tạo danh sách tháng tiếng Trung (Ví dụ: từ 2025年1月 đến 2027年12月)
-        function initMonthSelect() {
-            const select = document.getElementById('monthSelect');
-            select.innerHTML = '';
-            
-            const now = new Date();
-            const currentYear = now.getFullYear();
-            const currentMonth = now.getMonth() + 1;
-            
-            // Mặc định chọn tháng hiện tại dạng tiếng Trung
-            currentMonthKey = `${currentYear}年${currentMonth}月`;
-
-            const months = [];
-            // Lấy khoảng thời gian trước & sau 12 tháng
-            for (let y = currentYear - 1; y <= currentYear + 1; y++) {
-                for (let m = 1; m <= 12; m++) {
-                    months.push(`${y}年${m}月`);
-                }
-            }
-
-            months.forEach(mKey => {
-                const opt = document.createElement('option');
-                opt.value = mKey;
-                opt.innerText = mKey;
-                if (mKey === currentMonthKey) {
-                    opt.selected = true;
-                }
-                select.appendChild(opt);
-            });
-
-            updatePrintMonthText();
-        }
-
-        function onMonthChange(newMonthKey) {
-            currentMonthKey = newMonthKey;
-            updatePrintMonthText();
-            loadMonthData(currentMonthKey);
-        }
-
-        function updatePrintMonthText() {
-            const el1 = document.getElementById('printMonthText');
-            const el2 = document.getElementById('printMonthValue');
-            if (el1) el1.innerText = currentMonthKey;
-            if (el2) el2.innerText = currentMonthKey;
-        }
-
-        function getStorageKey(monthKey) {
-            return STORAGE_KEY_PREFIX + monthKey;
-        }
-
-        function loadMonthData(monthKey) {
-            const localSaved = localStorage.getItem(getStorageKey(monthKey));
-            if (localSaved) {
-                appData = JSON.parse(localSaved);
-            } else {
-                // Nếu chưa có dữ liệu cho tháng này, tạo mới từ bản mẫu
-                appData = JSON.parse(JSON.stringify(defaultDataTemplate));
-            }
             renderAll();
-        }
-
-        function autoSaveData() {
-            localStorage.setItem(getStorageKey(currentMonthKey), JSON.stringify(appData));
-            updateMetricsDashboard();
-            const statusBadge = document.getElementById('headerSaveStatus');
-            if (statusBadge) {
-                statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>保存中...</span>`;
-                setTimeout(() => {
-                    statusBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>已实时保存</span>`;
-                }, 300);
-            }
-        }
-
-        // Sao chép dữ liệu từ tháng trước sang tháng hiện tại
-        function copyPrevMonthData() {
-            const select = document.getElementById('monthSelect');
-            const currentIndex = select.selectedIndex;
-            if (currentIndex > 0) {
-                const prevMonthKey = select.options[currentIndex - 1].value;
-                const prevSaved = localStorage.getItem(getStorageKey(prevMonthKey));
-                if (prevSaved) {
-                    if (confirm(`是否确认将【${prevMonthKey}】的数据复制到【${currentMonthKey}】？`)) {
-                        appData = JSON.parse(prevSaved);
-                        renderAll();
-                        autoSaveData();
-                        alert(`已成功复制【${prevMonthKey}】的数据！`);
-                    }
-                } else {
-                    alert(`【${prevMonthKey}】暂无已保存的数据。`);
-                }
-            } else {
-                alert('前面没有更早的月份数据了。');
-            }
-        }
+        };
 
         function autoExpand(element) {
             if (!element) return;
@@ -633,8 +521,20 @@
             autoSaveData();
         }
 
+        function autoSaveData() {
+            localStorage.setItem('dianxiaomi_report_data', JSON.stringify(appData));
+            updateMetricsDashboard();
+            const statusBadge = document.getElementById('headerSaveStatus');
+            if (statusBadge) {
+                statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>保存中...</span>`;
+                setTimeout(() => {
+                    statusBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>已实时保存</span>`;
+                }, 300);
+            }
+        }
+
         function updateMetricsDashboard() {
-            if (appData.kpiList && appData.kpiList.length > 0) {
+            if (appData.kpiList.length > 0) {
                 const totalRate = appData.kpiList.reduce((acc, curr) => acc + (parseFloat(curr.rate) || 0), 0);
                 const avg = (totalRate / appData.kpiList.length).toFixed(1);
                 document.getElementById('dashKpiAvg').innerText = avg + '%';
@@ -642,8 +542,8 @@
                 document.getElementById('dashKpiAvg').innerText = '0%';
             }
 
-            document.getElementById('dashCustomerCount').innerText = appData.customerList ? appData.customerList.length : 0;
-            document.getElementById('dashIssueCount').innerText = appData.issueList ? appData.issueList.length : 0;
+            document.getElementById('dashCustomerCount').innerText = appData.customerList.length || 0;
+            document.getElementById('dashIssueCount').innerText = appData.issueList.length || 0;
         }
 
         function renderAll() {
@@ -702,12 +602,10 @@
             return `<div class="print-text-view">${escapeHtml(val)}</div>`;
         }
 
-        // ==================== KPI ====================
+        // ==================== KPI (Đã tối ưu DOM để không bị mất focus khi gõ nhiều số) ====================
         function renderKPI() {
             const tbody = document.getElementById('kpiTableBody');
             tbody.innerHTML = '';
-            if (!appData.kpiList) appData.kpiList = [];
-            
             appData.kpiList.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
@@ -784,7 +682,6 @@
         }
 
         function addKpiRow() {
-            if (!appData.kpiList) appData.kpiList = [];
             appData.kpiList.push({ name: '', target: '', actual: '', rate: 100, desc: '' });
             renderKPI();
             autoSaveData();
@@ -800,8 +697,6 @@
         function renderCustomers() {
             const tbody = document.getElementById('customerTableBody');
             tbody.innerHTML = '';
-            if (!appData.customerList) appData.customerList = [];
-
             appData.customerList.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
@@ -821,7 +716,6 @@
         }
 
         function addCustomerRow() {
-            if (!appData.customerList) appData.customerList = [];
             appData.customerList.push({ name: '', profile: '', status: '', chance: '' });
             renderCustomers();
             autoSaveData();
@@ -842,8 +736,6 @@
         function renderTasks() {
             const tbody = document.getElementById('taskTableBody');
             tbody.innerHTML = '';
-            if (!appData.taskList) appData.taskList = [];
-
             appData.taskList.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
@@ -858,7 +750,6 @@
         }
 
         function addTaskRow() {
-            if (!appData.taskList) appData.taskList = [];
             appData.taskList.push({ title: '', target: '', support: '' });
             renderTasks();
             autoSaveData();
@@ -879,8 +770,6 @@
         function renderIssues() {
             const tbody = document.getElementById('issueTableBody');
             tbody.innerHTML = '';
-            if (!appData.issueList) appData.issueList = [];
-
             appData.issueList.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
@@ -904,7 +793,6 @@
         }
 
         function addIssueRow() {
-            if (!appData.issueList) appData.issueList = [];
             appData.issueList.push({ category: '系统', desc: '', impact: '', support: '' });
             renderIssues();
             autoSaveData();
