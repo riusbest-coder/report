@@ -475,7 +475,7 @@
 
     <script>
         // DÁN URL WEB APP APPS SCRIPT CỦA BẠN VÀO ĐÂY
-        const GOOGLE_SCRIPT_URL = '[DÁN_WEB_APP_URL_TỪ_APPS_SCRIPT_VÀO_ĐÂY](https://script.google.com/macros/s/AKfycbzRnCPmP3C3l3ysh-_IezJtqYg5vfW7-DOk1I7iyu2cp8unpHHJjQZziO5kwArtJwcqJw/exec)';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRnCPmP3C3l3ysh-_IezJtqYg5vfW7-DOk1I7iyu2cp8unpHHJjQZziO5kwArtJwcqJw/exec';
 
         const initialData = {
             kpiList: [
