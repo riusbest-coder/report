@@ -1,4 +1,4 @@
-import html from '../index.html';
+import html from '../README.md';
 
 export default {
   async fetch(request, env, ctx) {
