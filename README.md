@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -50,6 +51,13 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94A3B8;
         }
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
         
         @media print {
             .no-print {
@@ -83,51 +91,49 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="min-h-screen flex flex-col justify-between bg-slate-50">
 
     <!-- Top Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+            <div class="flex flex-col sm:flex-row items-center justify-between py-3 sm:py-0 sm:h-16 gap-3 sm:gap-0">
                 <!-- Brand & Logo -->
-                <div class="flex items-center space-x-4">
-                    <div class="bg-brand-blue/10 p-2 rounded-xl border border-brand-blue/20 flex items-center justify-center">
-                        <i class="fa-solid fa-robot text-brand-blue text-2xl"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xl font-bold tracking-wide text-slate-900">店小秘</span>
+                <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-brand-blue/10 p-2 rounded-xl border border-brand-blue/20 flex items-center justify-center">
+                            <i class="fa-solid fa-robot text-brand-blue text-2xl"></i>
                         </div>
-                        <p class="text-xs text-slate-500">海外实施月度例会系统</p>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xl font-bold tracking-wide text-slate-900">店小秘</span>
+                            </div>
+                            <p class="text-xs text-slate-500">海外实施月度例会系统</p>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Meta Details & Actions -->
-                <div class="flex items-center space-x-4">
-                    <div class="hidden md:flex items-center space-x-6 text-sm border-r border-slate-200 pr-6">
-                        <div class="flex items-center space-x-2">
+                <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto space-x-2 sm:space-x-4">
+                    <div class="flex items-center space-x-2 sm:space-x-4 text-xs sm:text-sm border-r border-slate-200 pr-2 sm:pr-4">
+                        <div class="flex items-center space-x-1 sm:space-x-1.5">
                             <i class="fa-solid fa-earth-asia text-slate-400"></i>
-                            <span class="text-slate-500">区域：</span>
-                            <span class="font-semibold text-slate-800 bg-slate-100 px-2.5 py-1 rounded border border-slate-200">越南</span>
+                            <span class="text-slate-500 hidden md:inline">区域：</span>
+                            <span class="font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded border border-slate-200">越南</span>
                         </div>
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center space-x-1 sm:space-x-1.5">
                             <i class="fa-solid fa-user-tie text-slate-400"></i>
-                            <span class="text-slate-500">汇报人：</span>
-                            <span class="font-semibold text-slate-800 bg-slate-100 px-2.5 py-1 rounded border border-slate-200">阮红云</span>
+                            <span class="text-slate-500 hidden md:inline">汇报人：</span>
+                            <span class="font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded border border-slate-200">阮红云</span>
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
+                    <!-- Action Buttons (Save & Print) -->
                     <div class="flex items-center space-x-2">
-                        <button onclick="saveToLocalStorage()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition flex items-center space-x-1.5 border border-slate-300" title="暂存至浏览器">
+                        <button onclick="saveToLocalStorage()" class="px-3 py-1.5 sm:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 border border-slate-300 active:scale-95" title="暂存至浏览器">
                             <i class="fa-solid fa-floppy-disk text-emerald-600"></i>
-                            <span class="hidden sm:inline">保存</span>
-                        <label class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition flex items-center space-x-1.5 border border-slate-300 cursor-pointer" title="从 JSON 文件导入数据">
-                            <i class="fa-solid fa-upload text-amber-600"></i>
-                            <span class="hidden sm:inline">导入 JSON</span>
-                            <input type="file" id="importFileInput" class="hidden" accept=".json" onchange="importDataJSON(event)">
-                        </label>
-                        <button onclick="window.print()" class="px-3.5 py-2 bg-brand-blue hover:bg-blue-700 text-white font-medium rounded-lg text-sm transition flex items-center space-x-1.5 shadow-md shadow-brand-blue/20">
+                            <span>保存</span>
+                        </button>
+                        <button onclick="window.print()" class="px-3 sm:px-3.5 py-1.5 sm:py-2 bg-brand-blue hover:bg-blue-700 text-white font-medium rounded-lg text-xs sm:text-sm transition flex items-center space-x-1.5 shadow-md shadow-brand-blue/20 active:scale-95">
                             <i class="fa-solid fa-print"></i>
                             <span>打印 / 导出 PDF</span>
                         </button>
@@ -138,30 +144,30 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow w-full">
         
         <!-- Tab Navigation Bar -->
-        <div class="flex flex-wrap items-center justify-between border-b border-slate-200 mb-6 gap-2 no-print">
-            <nav class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none" id="tabNav">
-                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn px-4 py-2.5 rounded-t-lg font-semibold text-sm transition flex items-center space-x-2 bg-brand-blue text-white border-b-2 border-brand-blue shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 mb-6 gap-3 no-print">
+            <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto pb-2 scrollbar-none w-full md:w-auto" id="tabNav">
+                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-t-lg font-semibold text-xs sm:text-sm transition flex items-center space-x-2 bg-brand-blue text-white border-b-2 border-brand-blue shadow-sm">
                     <i class="fa-solid fa-chart-line"></i>
                     <span>1. 绩效目标进展</span>
                 </button>
-                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn px-4 py-2.5 rounded-t-lg font-medium text-sm transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-t-lg font-medium text-xs sm:text-sm transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                     <i class="fa-solid fa-users"></i>
                     <span>2. 客户跟进情况</span>
                 </button>
-                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn px-4 py-2.5 rounded-t-lg font-medium text-sm transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-t-lg font-medium text-xs sm:text-sm transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                     <i class="fa-solid fa-list-check"></i>
                     <span>3. 下月重点工作</span>
                 </button>
-                <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn px-4 py-2.5 rounded-t-lg font-medium text-sm transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-t-lg font-medium text-xs sm:text-sm transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <span>4. 卡点/异常问题</span>
                 </button>
             </nav>
 
-            <button onclick="toggleReferenceModal()" class="text-xs px-3 py-1.5 bg-white hover:bg-slate-50 text-brand-blue border border-brand-blue/40 rounded-lg font-semibold mb-2 transition flex items-center space-x-1.5 shadow-sm">
+            <button onclick="toggleReferenceModal()" class="self-start md:self-auto text-xs px-3 py-1.5 bg-white hover:bg-slate-50 text-brand-blue border border-brand-blue/40 rounded-lg font-semibold mb-2 transition flex items-center space-x-1.5 shadow-sm active:scale-95 shrink-0">
                 <i class="fa-solid fa-book-open"></i>
                 <span>查看 KPI 标准参考</span>
             </button>
@@ -172,7 +178,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-2xl font-bold text-slate-900">店小秘 - 海外实施月度例会报告</h1>
-                    <p class="text-sm text-slate-600 mt-1">Dianxiaomi ERP Overseas Implementation Monthly Report</p>
+                    <p class="text-sm text-slate-600 mt-1">Dianxiaomi Overseas Implementation Monthly Meeting Report</p>
                 </div>
                 <div class="text-right text-sm text-slate-800">
                     <p><strong>区域：</strong> 越南</p>
@@ -185,30 +191,30 @@
         <!-- ==================== TAB 1: 绩效目标进展 ==================== -->
         <div id="tab1" class="tab-content space-y-6">
             <!-- KPI Table Card -->
-            <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm print-card">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div class="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm print-card">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
-                            <span class="w-2.5 h-6 bg-brand-blue rounded-full inline-block"></span>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center space-x-2">
+                            <span class="w-2.5 h-5 sm:h-6 bg-brand-blue rounded-full inline-block"></span>
                             <span>1. 绩效目标达成情况</span>
                         </h2>
                         <p class="text-xs text-slate-500 mt-1">对照 KPI 指标，明确目标值、实际完成值并说明偏差原因。</p>
                     </div>
-                    <button onclick="addKpiRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
+                    <button onclick="addKpiRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto active:scale-95">
                         <i class="fa-solid fa-plus"></i>
                         <span>添加 KPI 指标</span>
                     </button>
                 </div>
 
                 <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                    <table class="w-full text-sm text-left text-slate-700 print-table">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table min-w-[640px]">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 min-w-[160px]">指标名称</th>
-                                <th scope="col" class="px-3 py-3 w-28">目标值</th>
-                                <th scope="col" class="px-3 py-3 w-28">实际完成值</th>
-                                <th scope="col" class="px-3 py-3 w-28">达成率 (%)</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px]">偏差说明 / 改进动作</th>
+                                <th scope="col" class="px-3 py-3 w-1/5 min-w-[140px]">指标名称</th>
+                                <th scope="col" class="px-3 py-3 w-24">目标值</th>
+                                <th scope="col" class="px-3 py-3 w-24">实际完成值</th>
+                                <th scope="col" class="px-3 py-3 w-24">达成率 (%)</th>
+                                <th scope="col" class="px-3 py-3 min-w-[180px]">偏差说明 / 改进动作</th>
                                 <th scope="col" class="px-2 py-3 w-12 text-center no-print">操作</th>
                             </tr>
                         </thead>
@@ -224,36 +230,36 @@
                         <i class="fa-solid fa-pen-to-square text-brand-blue"></i>
                         <span>达成情况小结（亮点 / 未达标原因）：</span>
                     </label>
-                    <textarea id="kpiSummary" rows="3" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="请填写：本月核心亮点、未达标原因及后续改进计划..."></textarea>
+                    <textarea id="kpiSummary" rows="3" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white transition" placeholder="请填写：本月核心亮点、未达标原因及后续改进计划..."></textarea>
                 </div>
             </div>
         </div>
 
         <!-- ==================== TAB 2: 客户跟进情况 ==================== -->
         <div id="tab2" class="tab-content space-y-6 hidden">
-            <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm print-card">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div class="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm print-card">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
-                            <span class="w-2.5 h-6 bg-brand-blue rounded-full inline-block"></span>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center space-x-2">
+                            <span class="w-2.5 h-5 sm:h-6 bg-brand-blue rounded-full inline-block"></span>
                             <span>2. 客户跟进情况</span>
                         </h2>
                         <p class="text-xs text-slate-500 mt-1">围绕客户画像、最新动态及付费转化机会展开。</p>
                     </div>
-                    <button onclick="addCustomerRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
+                    <button onclick="addCustomerRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto active:scale-95">
                         <i class="fa-solid fa-plus"></i>
                         <span>添加客户</span>
                     </button>
                 </div>
 
                 <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                    <table class="w-full text-sm text-left text-slate-700 print-table">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table min-w-[640px]">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 min-w-[140px]">客户名称</th>
-                                <th scope="col" class="px-3 py-3 min-w-[180px]">客户画像</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px]">最新动态</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px]">付费转化机会点</th>
+                                <th scope="col" class="px-3 py-3 min-w-[130px]">客户名称</th>
+                                <th scope="col" class="px-3 py-3 min-w-[160px]">客户画像</th>
+                                <th scope="col" class="px-3 py-3 min-w-[180px]">最新动态</th>
+                                <th scope="col" class="px-3 py-3 min-w-[180px]">付费转化机会点</th>
                                 <th scope="col" class="px-2 py-3 w-12 text-center no-print">操作</th>
                             </tr>
                         </thead>
@@ -269,35 +275,35 @@
                         <i class="fa-solid fa-pen-to-square text-brand-blue"></i>
                         <span>关键动态与转化机会小结：</span>
                     </label>
-                    <textarea id="customerSummary" rows="3" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="小结：本月重点客户、存在风险的客户群、潜在变现挖掘点..."></textarea>
+                    <textarea id="customerSummary" rows="3" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white transition" placeholder="小结：本月重点客户、存在风险的客户群、潜在变现挖掘点..."></textarea>
                 </div>
             </div>
         </div>
 
         <!-- ==================== TAB 3: 下月重点工作 ==================== -->
         <div id="tab3" class="tab-content space-y-6 hidden">
-            <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm print-card">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div class="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm print-card">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
-                            <span class="w-2.5 h-6 bg-brand-blue rounded-full inline-block"></span>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center space-x-2">
+                            <span class="w-2.5 h-5 sm:h-6 bg-brand-blue rounded-full inline-block"></span>
                             <span>3. 下月重点工作计划</span>
                         </h2>
                         <p class="text-xs text-slate-500 mt-1">聚焦可交付、可衡量的重点工作，明确优先级与所需支持。</p>
                     </div>
-                    <button onclick="addTaskRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
+                    <button onclick="addTaskRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto active:scale-95">
                         <i class="fa-solid fa-plus"></i>
                         <span>添加工作项</span>
                     </button>
                 </div>
 
                 <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                    <table class="w-full text-sm text-left text-slate-700 print-table">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table min-w-[640px]">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 min-w-[220px]">重点工作说明</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px]">目标 / 交付物</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px]">需求支持/协同</th>
+                                <th scope="col" class="px-3 py-3 min-w-[200px]">重点工作说明</th>
+                                <th scope="col" class="px-3 py-3 min-w-[180px]">目标 / 交付物</th>
+                                <th scope="col" class="px-3 py-3 min-w-[180px]">需求支持/协同</th>
                                 <th scope="col" class="px-2 py-3 w-12 text-center no-print">操作</th>
                             </tr>
                         </thead>
@@ -311,29 +317,29 @@
 
         <!-- ==================== TAB 4: 卡点 / 异常问题 ==================== -->
         <div id="tab4" class="tab-content space-y-6 hidden">
-            <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm print-card">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div class="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm print-card">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
-                            <span class="w-2.5 h-6 bg-brand-blue rounded-full inline-block"></span>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center space-x-2">
+                            <span class="w-2.5 h-5 sm:h-6 bg-brand-blue rounded-full inline-block"></span>
                             <span>4. 卡点 / 异常问题讨论</span>
                         </h2>
                         <p class="text-xs text-slate-500 mt-1">记录业务、客户、系统及工作体验方面的异常问题。</p>
                     </div>
-                    <button onclick="addIssueRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
+                    <button onclick="addIssueRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto active:scale-95">
                         <i class="fa-solid fa-plus"></i>
                         <span>添加问题</span>
                     </button>
                 </div>
 
                 <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                    <table class="w-full text-sm text-left text-slate-700 print-table">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table min-w-[640px]">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 w-36">问题分类</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px]">问题描述</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px]">影响与已尝试措施</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px]">需协调/支持事项</th>
+                                <th scope="col" class="px-3 py-3 w-32">问题分类</th>
+                                <th scope="col" class="px-3 py-3 min-w-[180px]">问题描述</th>
+                                <th scope="col" class="px-3 py-3 min-w-[180px]">影响与已尝试措施</th>
+                                <th scope="col" class="px-3 py-3 min-w-[180px]">需协调/支持事项</th>
                                 <th scope="col" class="px-2 py-3 w-12 text-center no-print">操作</th>
                             </tr>
                         </thead>
@@ -348,13 +354,13 @@
     </main>
 
     <!-- KPI Standard Reference Modal -->
-    <div id="referenceModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
+    <div id="referenceModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden no-print">
         <div class="bg-white border border-slate-200 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl">
             <!-- Modal Header -->
             <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50 rounded-t-2xl">
                 <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-book-open text-brand-blue text-lg"></i>
-                    <h3 class="text-base font-bold text-slate-900">KPI 数据参考标准</h3>
+                    <i class="fa-solid fa-book-open text-brand-blue text-base sm:text-lg"></i>
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900">KPI 数据参考标准</h3>
                 </div>
                 <button onclick="toggleReferenceModal()" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
                     <i class="fa-solid fa-xmark text-xl"></i>
@@ -362,15 +368,15 @@
             </div>
             
             <!-- Modal Body (Scrollable) -->
-            <div class="p-6 overflow-y-auto space-y-6 text-xs text-slate-700">
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6 text-xs text-slate-700">
                 <!-- Implementation Role KPI -->
                 <div>
-                    <h4 class="text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
+                    <h4 class="text-xs sm:text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-user-gear"></i>
                         <span>实施岗 KPI</span>
                     </h4>
                     <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                        <table class="w-full text-left">
+                        <table class="w-full text-left min-w-[500px]">
                             <thead class="bg-slate-100 text-slate-800 font-bold">
                                 <tr>
                                     <th class="p-2 border-b border-slate-200">KPI指标</th>
@@ -411,12 +417,12 @@
 
                 <!-- Customer Support Role KPI -->
                 <div>
-                    <h4 class="text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
+                    <h4 class="text-xs sm:text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-headset"></i>
                         <span>售后岗 KPI</span>
                     </h4>
                     <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                        <table class="w-full text-left">
+                        <table class="w-full text-left min-w-[500px]">
                             <thead class="bg-slate-100 text-slate-800 font-bold">
                                 <tr>
                                     <th class="p-2 border-b border-slate-200">KPI指标</th>
@@ -468,7 +474,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-4 no-print mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
-            <p>© 店小秘 海外实施月度例会系统 | 免费跨境电商 ERP</p>
+            <p>© 店小秘 海外实施月度例会系统</p>
         </div>
     </footer>
 
@@ -683,35 +689,6 @@
         function saveToLocalStorage() {
             localStorage.setItem('dianxiaomi_report_data', JSON.stringify(appData));
             showToast("已保存报告数据至浏览器！");
-        }
-
-        function exportDataJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `Dianxiaomi_Report_Vietnam_${new Date().toISOString().slice(0,10)}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            showToast("已导出 JSON 报告文件！");
-        }
-
-        function importDataJSON(event) {
-            const fileReader = new FileReader();
-            fileReader.onload = function(e) {
-                try {
-                    const parsedData = JSON.parse(e.target.result);
-                    appData = parsedData;
-                    renderAll();
-                    saveToLocalStorage();
-                    showToast("数据导入成功！");
-                } catch (err) {
-                    showToast("JSON 文件格式不正确！");
-                }
-            };
-            if(event.target.files[0]){
-                fileReader.readAsText(event.target.files[0]);
-            }
         }
 
         function showToast(message) {
