@@ -49,9 +49,6 @@
             background: #CBD5E1;
             border-radius: 3px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94A3B8;
-        }
         
         .auto-expand {
             resize: none;
@@ -62,7 +59,6 @@
             line-height: 1.4;
         }
 
-        /* Styling select dropdown for issue category */
         .category-select {
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%20066FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -72,7 +68,15 @@
             padding-right: 1.8rem !important;
         }
 
-        /* Full Text Display in PDF / Print Mode */
+        /* Khung hiển thị text dành riêng cho bản in PDF */
+        .print-text-view {
+            display: none;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        /* FIX TRIỆT ĐỂ LỖI BỊ ẨN CHỮ KHI XUẤT PDF */
         @media print {
             .no-print {
                 display: none !important;
@@ -101,24 +105,18 @@
                 border-color: #cbd5e1 !important;
                 color: #0f172a !important;
             }
-            /* Hiển thị 100% nội dung trong các ô nhập khi xuất PDF, mở rộng dòng không bị ẩn chữ */
+
+            /* Ẩn các ô input/textarea khi in */
             textarea, input, select {
-                border: none !important;
-                background: transparent !important;
-                padding: 0 !important;
-                resize: none !important;
-                appearance: none !important;
-                -webkit-appearance: none !important;
-                height: auto !important;
-                max-height: none !important;
-                overflow: visible !important;
-                white-space: pre-wrap !important;
-                word-break: break-word !important;
-                box-shadow: none !important;
+                display: none !important;
             }
-            .category-select {
-                background-image: none !important;
-                padding-right: 0 !important;
+
+            /* Hiện văn bản thuần túy dãn dòng 100% không giới hạn chiều cao */
+            .print-text-view {
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                min-height: 1em !important;
             }
         }
     </style>
@@ -129,7 +127,7 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Logo, Brand Name & Region Info -->
+                <!-- Logo & Info -->
                 <div class="flex items-center space-x-6">
                     <div class="flex items-center space-x-3">
                         <div class="bg-brand-blue/10 p-2 rounded-xl border border-brand-blue/20 flex items-center justify-center shrink-0">
@@ -141,7 +139,6 @@
                         </div>
                     </div>
 
-                    <!-- Divider and Region / Reporter Info -->
                     <div class="flex items-center space-x-4 text-xs lg:text-sm border-l border-slate-300 pl-6 h-8">
                         <div class="flex items-center space-x-1.5 shrink-0">
                             <i class="fa-solid fa-earth-asia text-brand-blue"></i>
@@ -156,7 +153,7 @@
                     </div>
                 </div>
 
-                <!-- Right Actions & Auto-save Status (Thêm ml-6/ml-10 tạo khoảng trống rộng rãi với 阮红云) -->
+                <!-- Right Actions & Auto-save Status (Khoảng trống rộng rãi giữa 阮红云 và 已实时保存) -->
                 <div class="flex items-center space-x-3 sm:space-x-5 ml-6 lg:ml-12">
                     <div class="hidden sm:flex items-center space-x-1 text-xs text-emerald-600 font-medium bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200" id="headerSaveStatus">
                         <i class="fa-solid fa-circle-check"></i>
@@ -255,7 +252,8 @@
                         <i class="fa-solid fa-pen-to-square text-brand-blue"></i>
                         <span>达成情况小结（亮点 / 未达标原因）：</span>
                     </label>
-                    <textarea id="kpiSummary" rows="2" oninput="autoExpand(this); autoSaveData()" class="auto-expand w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="请填写：本月核心亮点、未达标原因及后续改进计划..."></textarea>
+                    <textarea id="kpiSummary" rows="2" oninput="autoExpand(this); updateField('kpiSummary', this.value)" class="auto-expand w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="请填写：本月核心亮点、未达标原因及后续改进计划..."></textarea>
+                    <div id="pv_kpiSummary" class="print-text-view text-xs sm:text-sm p-1"></div>
                 </div>
             </div>
         </div>
@@ -297,7 +295,8 @@
                         <i class="fa-solid fa-pen-to-square text-brand-blue"></i>
                         <span>关键动态与转化机会小结：</span>
                     </label>
-                    <textarea id="customerSummary" rows="2" oninput="autoExpand(this); autoSaveData()" class="auto-expand w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="小结：本月重点客户、存在风险的客户群、潜在变现挖掘点..."></textarea>
+                    <textarea id="customerSummary" rows="2" oninput="autoExpand(this); updateField('customerSummary', this.value)" class="auto-expand w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="小结：本月重点客户、存在风险的客户群、潜在变现挖掘点..."></textarea>
+                    <div id="pv_customerSummary" class="print-text-view text-xs sm:text-sm p-1"></div>
                 </div>
             </div>
         </div>
@@ -535,6 +534,13 @@
             }, 10);
         }
 
+        function updateField(key, val) {
+            appData[key] = val;
+            const printEl = document.getElementById('pv_' + key);
+            if (printEl) printEl.innerText = val;
+            autoSaveData();
+        }
+
         function autoSaveData() {
             localStorage.setItem('dianxiaomi_report_data', JSON.stringify(appData));
             const statusBadge = document.getElementById('headerSaveStatus');
@@ -542,7 +548,7 @@
                 statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>保存中...</span>`;
                 setTimeout(() => {
                     statusBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>已实时保存</span>`;
-                }, 400);
+                }, 300);
             }
         }
 
@@ -594,7 +600,12 @@
                     }
                 });
                 triggerAllAutoExpand();
-            }, 100);
+            }, 150);
+        }
+
+        // Helper render row với khung view in riêng biệt
+        function makePrintCell(val) {
+            return `<div class="print-text-view">${escapeHtml(val)}</div>`;
         }
 
         // ==================== KPI ====================
@@ -605,17 +616,18 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.name)}</textarea></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.target)}</textarea></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'actual', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.actual)}</textarea></td>
-                    <td class="p-2"><input type="number" value="${item.rate}" oninput="updateKPI(${index}, 'rate', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-brand-blue font-bold focus:bg-white focus:border-brand-blue focus:outline-none"></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.desc)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.name)}</textarea>${makePrintCell(item.name)}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.target)}</textarea>${makePrintCell(item.target)}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'actual', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.actual)}</textarea>${makePrintCell(item.actual)}</td>
+                    <td class="p-2"><input type="number" value="${item.rate}" oninput="updateKPI(${index}, 'rate', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-brand-blue font-bold focus:bg-white focus:border-brand-blue focus:outline-none">${makePrintCell(item.rate + '%')}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.desc)}</textarea>${makePrintCell(item.desc)}</td>
                     <td class="p-2 text-center no-print"><button onclick="removeKPI(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
             const summaryEl = document.getElementById('kpiSummary');
             summaryEl.value = appData.kpiSummary || '';
+            document.getElementById('pv_kpiSummary').innerText = appData.kpiSummary || '';
             autoExpand(summaryEl);
         }
 
@@ -627,6 +639,7 @@
 
         function updateKPI(index, field, value) {
             appData.kpiList[index][field] = field === 'rate' ? parseFloat(value) || 0 : value;
+            renderKPI();
             autoSaveData();
         }
 
@@ -644,16 +657,17 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.name)}</textarea></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'profile', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.profile)}</textarea></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'status', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.status)}</textarea></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'chance', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.chance)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.name)}</textarea>${makePrintCell(item.name)}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'profile', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.profile)}</textarea>${makePrintCell(item.profile)}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'status', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.status)}</textarea>${makePrintCell(item.status)}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'chance', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.chance)}</textarea>${makePrintCell(item.chance)}</td>
                     <td class="p-2 text-center no-print"><button onclick="removeCustomer(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
             const summaryEl = document.getElementById('customerSummary');
             summaryEl.value = appData.customerSummary || '';
+            document.getElementById('pv_customerSummary').innerText = appData.customerSummary || '';
             autoExpand(summaryEl);
         }
 
@@ -665,6 +679,7 @@
 
         function updateCustomer(index, field, value) {
             appData.customerList[index][field] = value;
+            renderCustomers();
             autoSaveData();
         }
 
@@ -682,9 +697,9 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'title', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.title)}</textarea></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.target)}</textarea></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.support)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'title', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.title)}</textarea>${makePrintCell(item.title)}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.target)}</textarea>${makePrintCell(item.target)}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.support)}</textarea>${makePrintCell(item.support)}</td>
                     <td class="p-2 text-center no-print"><button onclick="removeTask(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
@@ -699,6 +714,7 @@
 
         function updateTask(index, field, value) {
             appData.taskList[index][field] = value;
+            renderTasks();
             autoSaveData();
         }
 
@@ -723,10 +739,11 @@
                             <option value="系统" ${item.category === '系统' ? 'selected' : ''}>💻 系统</option>
                             <option value="体验" ${item.category === '体验' ? 'selected' : ''}>✨ 体验</option>
                         </select>
+                        ${makePrintCell(item.category)}
                     </td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.desc)}</textarea></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'impact', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.impact)}</textarea></td>
-                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.support)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.desc)}</textarea>${makePrintCell(item.desc)}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'impact', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.impact)}</textarea>${makePrintCell(item.impact)}</td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.support)}</textarea>${makePrintCell(item.support)}</td>
                     <td class="p-2 text-center no-print"><button onclick="removeIssue(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
@@ -741,6 +758,7 @@
 
         function updateIssue(index, field, value) {
             appData.issueList[index][field] = value;
+            renderIssues();
             autoSaveData();
         }
 
