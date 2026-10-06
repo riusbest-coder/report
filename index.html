@@ -159,7 +159,7 @@
                     <!-- NÚT LƯU VÀO GOOGLE SHEET / EXCEL -->
                     <button onclick="saveToGoogleSheet()" id="btnSaveExcel" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-emerald-600/20 shrink-0">
                         <i class="fa-solid fa-file-excel"></i>
-                        <span>记录Google Sheet</span>
+                        <span>记录Excel</span>
                     </button>
 
                     <button onclick="printAllTabs()" class="px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-brand-blue/20 shrink-0">
@@ -614,7 +614,7 @@
             const originalText = btn.innerHTML;
             
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Đang lưu...</span>`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>记录中...</span>`;
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
@@ -623,13 +623,13 @@
                 body: JSON.stringify(appData)
             })
             .then(() => {
-                alert('Đã lưu thành công toàn bộ dữ liệu vào file Google Sheet/Excel!');
+                alert('已记录Excel!');
                 btn.disabled = false;
                 btn.innerHTML = originalText;
             })
             .catch(error => {
                 console.error('Lỗi:', error);
-                alert('Có lỗi xảy ra khi lưu dữ liệu!');
+                alert('记录数据时有误!');
                 btn.disabled = false;
                 btn.innerHTML = originalText;
             });
