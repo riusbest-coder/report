@@ -101,8 +101,8 @@
                 border-color: #cbd5e1 !important;
                 color: #0f172a !important;
             }
-            /* Expand textareas completely for full text printing without scrollbars */
-            textarea, select {
+            /* Hiển thị 100% nội dung trong các ô nhập khi xuất PDF, mở rộng dòng không bị ẩn chữ */
+            textarea, input, select {
                 border: none !important;
                 background: transparent !important;
                 padding: 0 !important;
@@ -114,6 +114,7 @@
                 overflow: visible !important;
                 white-space: pre-wrap !important;
                 word-break: break-word !important;
+                box-shadow: none !important;
             }
             .category-select {
                 background-image: none !important;
@@ -128,7 +129,7 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Logo, Brand Name & Fixed spacing to Region -->
+                <!-- Logo, Brand Name & Region Info -->
                 <div class="flex items-center space-x-6">
                     <div class="flex items-center space-x-3">
                         <div class="bg-brand-blue/10 p-2 rounded-xl border border-brand-blue/20 flex items-center justify-center shrink-0">
@@ -140,7 +141,7 @@
                         </div>
                     </div>
 
-                    <!-- Fixed divider and Region / Reporter Info -->
+                    <!-- Divider and Region / Reporter Info -->
                     <div class="flex items-center space-x-4 text-xs lg:text-sm border-l border-slate-300 pl-6 h-8">
                         <div class="flex items-center space-x-1.5 shrink-0">
                             <i class="fa-solid fa-earth-asia text-brand-blue"></i>
@@ -155,9 +156,9 @@
                     </div>
                 </div>
 
-                <!-- Right Actions & Auto-save Status -->
-                <div class="flex items-center space-x-3 sm:space-x-4">
-                    <div class="hidden sm:flex items-center space-x-1 text-xs text-emerald-600 font-medium bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200" id="headerSaveStatus">
+                <!-- Right Actions & Auto-save Status (Thêm ml-6/ml-10 tạo khoảng trống rộng rãi với 阮红云) -->
+                <div class="flex items-center space-x-3 sm:space-x-5 ml-6 lg:ml-12">
+                    <div class="hidden sm:flex items-center space-x-1 text-xs text-emerald-600 font-medium bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200" id="headerSaveStatus">
                         <i class="fa-solid fa-circle-check"></i>
                         <span>已实时保存</span>
                     </div>
