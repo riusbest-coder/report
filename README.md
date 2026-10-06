@@ -151,11 +151,18 @@
                     </div>
                 </div>
 
-                <!-- Right Actions & Auto-save Status -->
+                <!-- Right Actions: Select Month, Status & Print Button -->
                 <div class="flex items-center space-x-3 sm:space-x-4">
-                    <div class="hidden sm:flex items-center space-x-1.5 text-xs text-emerald-600 font-semibold bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200" id="headerSaveStatus">
+                    <!-- 📅 CỤM CHỌN THÁNG BÁO CÁO -->
+                    <div class="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <i class="fa-solid fa-calendar-days text-brand-blue pl-2 text-xs"></i>
+                        <span class="text-xs font-semibold text-slate-600 hidden md:inline">月份:</span>
+                        <input type="month" id="reportMonthPicker" onchange="changeReportMonth(this.value)" class="bg-white text-xs font-bold text-slate-800 border border-slate-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-blue/30 cursor-pointer">
+                    </div>
+
+                    <div class="hidden lg:flex items-center space-x-1.5 text-xs text-emerald-600 font-semibold bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200" id="headerSaveStatus">
                         <i class="fa-solid fa-circle-check"></i>
-                        <span>已实时保存</span>
+                        <span>已保存</span>
                     </div>
 
                     <button onclick="printAllTabs()" class="px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-brand-blue/20 shrink-0">
@@ -170,7 +177,7 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 flex-grow w-full" id="mainContainer">
 
-        <!-- 🚀 TRỰC QUAN HÓA: Dashboard Tóm Tắt Nhanh (Quick Metrics Cards) -->
+        <!-- Dashboard Tóm Tắt Nhanh (Quick Metrics Cards) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 no-print">
             <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
                 <div>
@@ -239,13 +246,13 @@
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold text-slate-900">店小秘 - 海外实施月度例会报告</h1>
-                        <p class="text-xs text-slate-600 mt-1">店小秘 ERP 海外实施月度例会报告</p>
+                        <p class="text-xs text-slate-600 mt-1">报告月份: <span id="printReportMonth" class="font-bold"></span></p>
                     </div>
                 </div>
                 <div class="text-right text-xs text-slate-800">
                     <p><strong>区域：</strong> 越南</p>
                     <p><strong>汇报人：</strong> 阮红云</p>
-                    <p><strong>报告导出日期：</strong> <span id="printDate"></span></p>
+                    <p><strong>导出日期：</strong> <span id="printDate"></span></p>
                 </div>
             </div>
         </div>
@@ -527,36 +534,83 @@
     </footer>
 
     <script>
-        const initialData = {
+        // Mẫu dữ liệu chuẩn
+        const defaultDataTemplate = {
             kpiList: [
-                { name: '演示目标', target: '100%', actual: '95%', rate: 95, desc: '达到越南市场演示目标的 95%。' },
-                { name: '日活转化率', target: '30%', actual: '28%', rate: 93.3, desc: '东南亚区域需在下阶段加速推进。' },
-                { name: '售后跟进', target: '100%', actual: '100%', rate: 100, desc: '已按时完成 SA/A 级客户定期回访报告。' },
-                { name: '学习提效', target: '95分', actual: '96分', rate: 101, desc: '已完成内部培训及指导文档编写。' }
+                { name: '演示目标', target: '100%', actual: '100%', rate: 100, desc: '' },
+                { name: '日活转化率', target: '30%', actual: '30%', rate: 100, desc: '' },
+                { name: '售后跟进', target: '100%', actual: '100%', rate: 100, desc: '' },
+                { name: '学习提效', target: '95分', actual: '95分', rate: 100, desc: '' }
             ],
-            kpiSummary: '本月团队在 SA 重点客户服务指标上表现良好，日活转化率在深入演示环节仍需加强。',
-            customerList: [
-                { name: '客户 A (Shopee 大卖家)', profile: '大卖家 / 多渠道仓储对接需求', status: '已安装试用 ERP，反馈良好', chance: '预计 11 月转化尊享版 (12,000,000 VND)' },
-                { name: '店铺 B (Lazada 品牌商)', profile: '服装主理人 / 订单管理需求', status: '需协助配置自动打印面单', chance: '预计下周升级旗舰版' }
-            ],
-            customerSummary: '重点客户 A 进展非常顺利，需集中力量解决店铺 B 遗留的服务工单。',
-            taskList: [
-                { title: '优化 VIP 客户 Onboarding 流程', target: '指导周期由 3 天缩短至 1 天', support: '需技术团队支持 API 仓库对接' },
-                { title: '组织新功能线上研讨会 (Webinar)', target: '至少 50 家企业参会', support: '越南市场团队协助宣传推广' }
-            ],
-            issueList: [
-                { category: '系统', desc: '高峰期（20点-22点）大批量同步订单网络卡顿', impact: '客户反馈稍慢，已提交技术排查', support: '需开发优化服务器带宽与并发' },
-                { category: '业务', desc: '新税收政策导致客户需要增加发票字段', impact: '目前临时人工指导处理', support: '需系统更新标准发票模板' }
-            ]
+            kpiSummary: '',
+            customerList: [],
+            customerSummary: '',
+            taskList: [],
+            issueList: []
         };
 
-        let appData = JSON.parse(localStorage.getItem('dianxiaomi_report_data')) || initialData;
+        let currentMonthKey = ''; // Định dạng YYYY-MM
+        let appData = {};
         let currentActiveTab = 'tab1';
 
         window.onload = function() {
-            document.getElementById('printDate').innerText = new Date().toLocaleDateString('zh-CN');
-            renderAll();
+            // Lấy tháng hiện tại làm mặc định (YYYY-MM)
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            currentMonthKey = `${year}-${month}`;
+
+            // Gán giá trị mặc định cho ô chọn tháng
+            const monthPicker = document.getElementById('reportMonthPicker');
+            if (monthPicker) {
+                monthPicker.value = currentMonthKey;
+            }
+
+            // Ngày xuất file PDF
+            document.getElementById('printDate').innerText = now.toLocaleDateString('zh-CN');
+
+            // Tải dữ liệu của tháng hiện tại
+            loadMonthData(currentMonthKey);
         };
+
+        // Switch & Tải dữ liệu khi đổi tháng
+        function changeReportMonth(selectedMonth) {
+            if (!selectedMonth) return;
+            currentMonthKey = selectedMonth;
+            loadMonthData(currentMonthKey);
+        }
+
+        // Tải dữ liệu từ LocalStorage theo key từng tháng
+        function loadMonthData(monthKey) {
+            const storageKey = `dianxiaomi_report_${monthKey}`;
+            const savedData = localStorage.getItem(storageKey);
+
+            if (savedData) {
+                appData = JSON.parse(savedData);
+            } else {
+                // Nếu tháng này chưa từng tạo dữ liệu -> Dùng mẫu mặc định
+                appData = JSON.parse(JSON.stringify(defaultDataTemplate));
+            }
+
+            // Cập nhật nhãn hiển thị tháng trên PDF
+            document.getElementById('printReportMonth').innerText = monthKey;
+
+            renderAll();
+        }
+
+        function autoSaveData() {
+            const storageKey = `dianxiaomi_report_${currentMonthKey}`;
+            localStorage.setItem(storageKey, JSON.stringify(appData));
+            updateMetricsDashboard();
+            
+            const statusBadge = document.getElementById('headerSaveStatus');
+            if (statusBadge) {
+                statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>保存中...</span>`;
+                setTimeout(() => {
+                    statusBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>已保存 (${currentMonthKey})</span>`;
+                }, 250);
+            }
+        }
 
         function autoExpand(element) {
             if (!element) return;
@@ -577,21 +631,8 @@
             autoSaveData();
         }
 
-        function autoSaveData() {
-            localStorage.setItem('dianxiaomi_report_data', JSON.stringify(appData));
-            updateMetricsDashboard();
-            const statusBadge = document.getElementById('headerSaveStatus');
-            if (statusBadge) {
-                statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>保存中...</span>`;
-                setTimeout(() => {
-                    statusBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>已实时保存</span>`;
-                }, 300);
-            }
-        }
-
-        /* 🚀 TRỰC QUAN HÓA: Cập nhật chỉ số Quick Dashboard */
         function updateMetricsDashboard() {
-            if (appData.kpiList.length > 0) {
+            if (appData.kpiList && appData.kpiList.length > 0) {
                 const totalRate = appData.kpiList.reduce((acc, curr) => acc + (parseFloat(curr.rate) || 0), 0);
                 const avg = (totalRate / appData.kpiList.length).toFixed(1);
                 document.getElementById('dashKpiAvg').innerText = avg + '%';
@@ -599,8 +640,8 @@
                 document.getElementById('dashKpiAvg').innerText = '0%';
             }
 
-            document.getElementById('dashCustomerCount').innerText = appData.customerList.length || 0;
-            document.getElementById('dashIssueCount').innerText = appData.issueList.length || 0;
+            document.getElementById('dashCustomerCount').innerText = appData.customerList ? appData.customerList.length : 0;
+            document.getElementById('dashIssueCount').innerText = appData.issueList ? appData.issueList.length : 0;
         }
 
         function renderAll() {
@@ -659,11 +700,11 @@
             return `<div class="print-text-view">${escapeHtml(val)}</div>`;
         }
 
-        // ==================== KPI (Đã thêm Progress Bar trực quan) ====================
+        // ==================== KPI ====================
         function renderKPI() {
             const tbody = document.getElementById('kpiTableBody');
             tbody.innerHTML = '';
-            appData.kpiList.forEach((item, index) => {
+            (appData.kpiList || []).forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
                 
@@ -700,6 +741,7 @@
         }
 
         function addKpiRow() {
+            if (!appData.kpiList) appData.kpiList = [];
             appData.kpiList.push({ name: '', target: '', actual: '', rate: 100, desc: '' });
             renderKPI();
             autoSaveData();
@@ -721,7 +763,7 @@
         function renderCustomers() {
             const tbody = document.getElementById('customerTableBody');
             tbody.innerHTML = '';
-            appData.customerList.forEach((item, index) => {
+            (appData.customerList || []).forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
                 tr.innerHTML = `
@@ -740,6 +782,7 @@
         }
 
         function addCustomerRow() {
+            if (!appData.customerList) appData.customerList = [];
             appData.customerList.push({ name: '', profile: '', status: '', chance: '' });
             renderCustomers();
             autoSaveData();
@@ -761,7 +804,7 @@
         function renderTasks() {
             const tbody = document.getElementById('taskTableBody');
             tbody.innerHTML = '';
-            appData.taskList.forEach((item, index) => {
+            (appData.taskList || []).forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
                 tr.innerHTML = `
@@ -775,6 +818,7 @@
         }
 
         function addTaskRow() {
+            if (!appData.taskList) appData.taskList = [];
             appData.taskList.push({ title: '', target: '', support: '' });
             renderTasks();
             autoSaveData();
@@ -796,7 +840,7 @@
         function renderIssues() {
             const tbody = document.getElementById('issueTableBody');
             tbody.innerHTML = '';
-            appData.issueList.forEach((item, index) => {
+            (appData.issueList || []).forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
                 tr.innerHTML = `
@@ -819,6 +863,7 @@
         }
 
         function addIssueRow() {
+            if (!appData.issueList) appData.issueList = [];
             appData.issueList.push({ category: '系统', desc: '', impact: '', support: '' });
             renderIssues();
             autoSaveData();
