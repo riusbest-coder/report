@@ -1,6 +1,11 @@
+import html from '../index.html';
+
 export default {
   async fetch(request, env, ctx) {
-    // Trỏ Worker tự động phục vụ các tệp giao diện (HTML/CSS/JS) trong assets
-    return env.ASSETS.fetch(request);
+    return new Response(html, {
+      headers: {
+        'content-type': 'text/html;charset=UTF-8',
+      },
+    });
   },
 };
