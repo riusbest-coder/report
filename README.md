@@ -153,7 +153,7 @@
                     </div>
                 </div>
 
-                <!-- Right Actions & Auto-save Status (Khoảng trống rộng rãi giữa 阮红云 và 已实时保存) -->
+                <!-- Right Actions & Auto-save Status -->
                 <div class="flex items-center space-x-3 sm:space-x-5 ml-6 lg:ml-12">
                     <div class="hidden sm:flex items-center space-x-1 text-xs text-emerald-600 font-medium bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200" id="headerSaveStatus">
                         <i class="fa-solid fa-circle-check"></i>
@@ -199,12 +199,18 @@
             </button>
         </div>
 
-        <!-- Print Header Title -->
+        <!-- Print Header Title (Cập nhật Logo và Tiêu đề Tiếng Trung khi xuất PDF) -->
         <div class="hidden print:block mb-6 border-b-2 border-slate-900 pb-4">
             <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold text-slate-900">店小秘 - 海外实施月度例会报告</h1>
-                    <p class="text-xs text-slate-600 mt-1">Dianxiaomi ERP Overseas Implementation Monthly Report</p>
+                <div class="flex items-center space-x-4">
+                    <!-- Logo trên bản PDF -->
+                    <div class="border border-slate-400 p-2 rounded-xl flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-robot text-slate-900 text-3xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900">店小秘 - 海外实施月度例会报告</h1>
+                        <p class="text-xs text-slate-600 mt-1">店小秘 ERP 海外实施月度例会报告</p>
+                    </div>
                 </div>
                 <div class="text-right text-xs text-slate-800">
                     <p><strong>区域：</strong> 越南</p>
@@ -603,7 +609,6 @@
             }, 150);
         }
 
-        // Helper render row với khung view in riêng biệt
         function makePrintCell(val) {
             return `<div class="print-text-view">${escapeHtml(val)}</div>`;
         }
