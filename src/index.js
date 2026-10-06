@@ -1,5 +1,6 @@
 export default {
   async fetch(request, env, ctx) {
-    return new Response("Hello World!");
+    // Trỏ Worker tự động phục vụ các tệp giao diện (HTML/CSS/JS) trong assets
+    return env.ASSETS.fetch(request);
   },
 };
