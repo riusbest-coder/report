@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -30,6 +31,7 @@
             }
         }
     </script>
+    
     <style>
         body {
             background-color: #F8FAFC;
@@ -50,14 +52,8 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94A3B8;
         }
-        .scrollbar-none::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-none {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
         
+        /* Print styles: Allow all tabs to be visible in PDF / Print preview */
         @media print {
             .no-print {
                 display: none !important;
@@ -66,120 +62,123 @@
                 background-color: #ffffff !important;
                 color: #000000 !important;
             }
-            .print-container {
-                background: white !important;
-                color: black !important;
-                box-shadow: none !important;
-                border: none !important;
-                width: 100% !important;
+            .print-all-tabs .tab-content {
+                display: block !important;
+                margin-bottom: 2rem !important;
+                page-break-inside: avoid;
             }
             .print-card {
                 background: white !important;
-                border: 1px solid #d1d5db !important;
+                border: 1px solid #cbd5e1 !important;
                 color: black !important;
                 box-shadow: none !important;
+                break-inside: avoid;
             }
             .print-table th {
-                background-color: #f3f4f6 !important;
-                color: #111827 !important;
+                background-color: #f1f5f9 !important;
+                color: #0f172a !important;
             }
             .print-table td, .print-table th {
-                border-color: #d1d5db !important;
-                color: #111827 !important;
+                border-color: #cbd5e1 !important;
+                color: #0f172a !important;
+            }
+            input, textarea, select {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                resize: none !important;
             }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between bg-slate-50">
+<body class="min-h-screen flex flex-col justify-between">
 
     <!-- Top Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col sm:flex-row items-center justify-between py-3 sm:py-0 sm:h-16 gap-3 sm:gap-0">
+            <div class="flex items-center justify-between h-16">
                 <!-- Brand & Logo -->
-                <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-brand-blue/10 p-2 rounded-xl border border-brand-blue/20 flex items-center justify-center">
-                            <i class="fa-solid fa-robot text-brand-blue text-2xl"></i>
+                <div class="flex items-center space-x-3">
+                    <div class="bg-brand-blue/10 p-2 rounded-xl border border-brand-blue/20 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-robot text-brand-blue text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xl font-bold tracking-wide text-slate-900">店小秘</span>
                         </div>
-                        <div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-xl font-bold tracking-wide text-slate-900">店小秘</span>
-                            </div>
-                            <p class="text-xs text-slate-500">海外实施月度例会系统</p>
-                        </div>
+                        <p class="text-xs text-slate-500 hidden sm:block">海外实施月度例会系统</p>
                     </div>
                 </div>
 
                 <!-- Meta Details & Actions -->
-                <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto space-x-2 sm:space-x-4">
-                    <div class="flex items-center space-x-2 sm:space-x-4 text-xs sm:text-sm border-r border-slate-200 pr-2 sm:pr-4">
-                        <div class="flex items-center space-x-1 sm:space-x-1.5">
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <div class="hidden md:flex items-center space-x-4 text-xs lg:text-sm border-r border-slate-200 pr-4">
+                        <div class="flex items-center space-x-1.5">
                             <i class="fa-solid fa-earth-asia text-slate-400"></i>
-                            <span class="text-slate-500 hidden md:inline">区域：</span>
-                            <span class="font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded border border-slate-200">越南</span>
+                            <span class="text-slate-500">区域：</span>
+                            <span class="font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">越南</span>
                         </div>
-                        <div class="flex items-center space-x-1 sm:space-x-1.5">
+                        <div class="flex items-center space-x-1.5">
                             <i class="fa-solid fa-user-tie text-slate-400"></i>
-                            <span class="text-slate-500 hidden md:inline">汇报人：</span>
-                            <span class="font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded border border-slate-200">阮红云</span>
+                            <span class="text-slate-500">汇报人：</span>
+                            <span class="font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">阮红云</span>
                         </div>
                     </div>
 
-                    <!-- Action Buttons (Save & Print) -->
-                    <div class="flex items-center space-x-2">
-                        <button onclick="saveToLocalStorage()" class="px-3 py-1.5 sm:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 border border-slate-300 active:scale-95" title="暂存至浏览器">
-                            <i class="fa-solid fa-floppy-disk text-emerald-600"></i>
-                            <span>保存</span>
-                        </button>
-                        <button onclick="window.print()" class="px-3 sm:px-3.5 py-1.5 sm:py-2 bg-brand-blue hover:bg-blue-700 text-white font-medium rounded-lg text-xs sm:text-sm transition flex items-center space-x-1.5 shadow-md shadow-brand-blue/20 active:scale-95">
-                            <i class="fa-solid fa-print"></i>
-                            <span>打印 / 导出 PDF</span>
-                        </button>
+                    <!-- Auto-save status -->
+                    <div class="hidden sm:flex items-center space-x-1 text-xs text-emerald-600 font-medium bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200" id="headerSaveStatus">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>已实时保存</span>
                     </div>
+
+                    <!-- Print / Export All PDF Button -->
+                    <button onclick="printAllTabs()" class="px-3.5 py-2 bg-brand-blue hover:bg-blue-700 text-white font-medium rounded-lg text-xs sm:text-sm transition flex items-center space-x-1.5 shadow-md shadow-brand-blue/20 shrink-0">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <span>打印 / 导出 PDF (全汇报)</span>
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Main Content Area -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow w-full" id="mainContainer">
         
         <!-- Tab Navigation Bar -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 mb-6 gap-3 no-print">
-            <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto pb-2 scrollbar-none w-full md:w-auto" id="tabNav">
-                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-t-lg font-semibold text-xs sm:text-sm transition flex items-center space-x-2 bg-brand-blue text-white border-b-2 border-brand-blue shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 mb-6 gap-3 no-print">
+            <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-none" id="tabNav">
+                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-t-lg font-semibold text-xs sm:text-sm transition flex items-center space-x-1.5 whitespace-nowrap bg-brand-blue text-white border-b-2 border-brand-blue shadow-sm">
                     <i class="fa-solid fa-chart-line"></i>
                     <span>1. 绩效目标进展</span>
                 </button>
-                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-t-lg font-medium text-xs sm:text-sm transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-t-lg font-medium text-xs sm:text-sm transition flex items-center space-x-1.5 whitespace-nowrap text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                     <i class="fa-solid fa-users"></i>
                     <span>2. 客户跟进情况</span>
                 </button>
-                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-t-lg font-medium text-xs sm:text-sm transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-t-lg font-medium text-xs sm:text-sm transition flex items-center space-x-1.5 whitespace-nowrap text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                     <i class="fa-solid fa-list-check"></i>
                     <span>3. 下月重点工作</span>
                 </button>
-                <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-t-lg font-medium text-xs sm:text-sm transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-t-lg font-medium text-xs sm:text-sm transition flex items-center space-x-1.5 whitespace-nowrap text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <span>4. 卡点/异常问题</span>
                 </button>
             </nav>
 
-            <button onclick="toggleReferenceModal()" class="self-start md:self-auto text-xs px-3 py-1.5 bg-white hover:bg-slate-50 text-brand-blue border border-brand-blue/40 rounded-lg font-semibold mb-2 transition flex items-center space-x-1.5 shadow-sm active:scale-95 shrink-0">
+            <button onclick="toggleReferenceModal()" class="text-xs px-3 py-1.5 bg-white hover:bg-slate-50 text-brand-blue border border-brand-blue/40 rounded-lg font-semibold mb-2 sm:mb-0 transition flex items-center justify-center space-x-1.5 shadow-sm self-start sm:self-auto">
                 <i class="fa-solid fa-book-open"></i>
                 <span>查看 KPI 标准参考</span>
             </button>
         </div>
 
-        <!-- Print Title Section (Only Visible when Printing) -->
+        <!-- Print Title Section (Only Visible when Printing PDF) -->
         <div class="hidden print:block mb-6 border-b-2 border-slate-900 pb-4">
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-2xl font-bold text-slate-900">店小秘 - 海外实施月度例会报告</h1>
-                    <p class="text-sm text-slate-600 mt-1">Dianxiaomi Overseas Implementation Monthly Meeting Report</p>
+                    <p class="text-xs text-slate-600 mt-1">Dianxiaomi ERP Overseas Implementation Monthly Report</p>
                 </div>
-                <div class="text-right text-sm text-slate-800">
+                <div class="text-right text-xs text-slate-800">
                     <p><strong>区域：</strong> 越南</p>
                     <p><strong>汇报人：</strong> 阮红云</p>
                     <p><strong>报告导出日期：</strong> <span id="printDate"></span></p>
@@ -189,7 +188,6 @@
 
         <!-- ==================== TAB 1: 绩效目标进展 ==================== -->
         <div id="tab1" class="tab-content space-y-6">
-            <!-- KPI Table Card -->
             <div class="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm print-card">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div>
@@ -199,22 +197,22 @@
                         </h2>
                         <p class="text-xs text-slate-500 mt-1">对照 KPI 指标，明确目标值、实际完成值并说明偏差原因。</p>
                     </div>
-                    <button onclick="addKpiRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto active:scale-95">
+                    <button onclick="addKpiRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
                         <i class="fa-solid fa-plus"></i>
                         <span>添加 KPI 指标</span>
                     </button>
                 </div>
 
                 <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table min-w-[640px]">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 w-1/5 min-w-[140px]">指标名称</th>
-                                <th scope="col" class="px-3 py-3 w-24">目标值</th>
-                                <th scope="col" class="px-3 py-3 w-24">实际完成值</th>
-                                <th scope="col" class="px-3 py-3 w-24">达成率 (%)</th>
+                                <th scope="col" class="px-3 py-3 min-w-[140px]">指标名称</th>
+                                <th scope="col" class="px-3 py-3 min-w-[90px]">目标值</th>
+                                <th scope="col" class="px-3 py-3 min-w-[90px]">实际完成值</th>
+                                <th scope="col" class="px-3 py-3 min-w-[90px]">达成率 (%)</th>
                                 <th scope="col" class="px-3 py-3 min-w-[180px]">偏差说明 / 改进动作</th>
-                                <th scope="col" class="px-2 py-3 w-12 text-center no-print">操作</th>
+                                <th scope="col" class="px-2 py-3 w-10 text-center no-print">操作</th>
                             </tr>
                         </thead>
                         <tbody id="kpiTableBody" class="divide-y divide-slate-200 bg-white">
@@ -229,7 +227,7 @@
                         <i class="fa-solid fa-pen-to-square text-brand-blue"></i>
                         <span>达成情况小结（亮点 / 未达标原因）：</span>
                     </label>
-                    <textarea id="kpiSummary" rows="3" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white transition" placeholder="请填写：本月核心亮点、未达标原因及后续改进计划..."></textarea>
+                    <textarea id="kpiSummary" rows="3" oninput="autoSaveData()" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="请填写：本月核心亮点、未达标原因及后续改进计划..."></textarea>
                 </div>
             </div>
         </div>
@@ -245,21 +243,21 @@
                         </h2>
                         <p class="text-xs text-slate-500 mt-1">围绕客户画像、最新动态及付费转化机会展开。</p>
                     </div>
-                    <button onclick="addCustomerRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto active:scale-95">
+                    <button onclick="addCustomerRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
                         <i class="fa-solid fa-plus"></i>
                         <span>添加客户</span>
                     </button>
                 </div>
 
                 <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table min-w-[640px]">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
                                 <th scope="col" class="px-3 py-3 min-w-[130px]">客户名称</th>
                                 <th scope="col" class="px-3 py-3 min-w-[160px]">客户画像</th>
                                 <th scope="col" class="px-3 py-3 min-w-[180px]">最新动态</th>
                                 <th scope="col" class="px-3 py-3 min-w-[180px]">付费转化机会点</th>
-                                <th scope="col" class="px-2 py-3 w-12 text-center no-print">操作</th>
+                                <th scope="col" class="px-2 py-3 w-10 text-center no-print">操作</th>
                             </tr>
                         </thead>
                         <tbody id="customerTableBody" class="divide-y divide-slate-200 bg-white">
@@ -274,7 +272,7 @@
                         <i class="fa-solid fa-pen-to-square text-brand-blue"></i>
                         <span>关键动态与转化机会小结：</span>
                     </label>
-                    <textarea id="customerSummary" rows="3" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white transition" placeholder="小结：本月重点客户、存在风险的客户群、潜在变现挖掘点..."></textarea>
+                    <textarea id="customerSummary" rows="3" oninput="autoSaveData()" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="小结：本月重点客户、存在风险的客户群、潜在变现挖掘点..."></textarea>
                 </div>
             </div>
         </div>
@@ -290,20 +288,20 @@
                         </h2>
                         <p class="text-xs text-slate-500 mt-1">聚焦可交付、可衡量的重点工作，明确优先级与所需支持。</p>
                     </div>
-                    <button onclick="addTaskRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto active:scale-95">
+                    <button onclick="addTaskRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
                         <i class="fa-solid fa-plus"></i>
                         <span>添加工作项</span>
                     </button>
                 </div>
 
                 <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table min-w-[640px]">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
                                 <th scope="col" class="px-3 py-3 min-w-[200px]">重点工作说明</th>
                                 <th scope="col" class="px-3 py-3 min-w-[180px]">目标 / 交付物</th>
                                 <th scope="col" class="px-3 py-3 min-w-[180px]">需求支持/协同</th>
-                                <th scope="col" class="px-2 py-3 w-12 text-center no-print">操作</th>
+                                <th scope="col" class="px-2 py-3 w-10 text-center no-print">操作</th>
                             </tr>
                         </thead>
                         <tbody id="taskTableBody" class="divide-y divide-slate-200 bg-white">
@@ -325,21 +323,21 @@
                         </h2>
                         <p class="text-xs text-slate-500 mt-1">记录业务、客户、系统及工作体验方面的异常问题。</p>
                     </div>
-                    <button onclick="addIssueRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto active:scale-95">
+                    <button onclick="addIssueRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
                         <i class="fa-solid fa-plus"></i>
                         <span>添加问题</span>
                     </button>
                 </div>
 
                 <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table min-w-[640px]">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 w-32">问题分类</th>
+                                <th scope="col" class="px-3 py-3 w-28">问题分类</th>
                                 <th scope="col" class="px-3 py-3 min-w-[180px]">问题描述</th>
                                 <th scope="col" class="px-3 py-3 min-w-[180px]">影响与已尝试措施</th>
                                 <th scope="col" class="px-3 py-3 min-w-[180px]">需协调/支持事项</th>
-                                <th scope="col" class="px-2 py-3 w-12 text-center no-print">操作</th>
+                                <th scope="col" class="px-2 py-3 w-10 text-center no-print">操作</th>
                             </tr>
                         </thead>
                         <tbody id="issueTableBody" class="divide-y divide-slate-200 bg-white">
@@ -358,7 +356,7 @@
             <!-- Modal Header -->
             <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50 rounded-t-2xl">
                 <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-book-open text-brand-blue text-base sm:text-lg"></i>
+                    <i class="fa-solid fa-book-open text-brand-blue text-lg"></i>
                     <h3 class="text-sm sm:text-base font-bold text-slate-900">KPI 数据参考标准</h3>
                 </div>
                 <button onclick="toggleReferenceModal()" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
@@ -471,20 +469,14 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-4 no-print mt-auto">
+    <footer class="bg-white border-t border-slate-200 py-3 sm:py-4 no-print mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
-            <p>© 店小秘 海外实施月度例会系统</p>
+            <p>© 店小秘 海外实施月度例会系统 | 免费跨境电商 ERP</p>
         </div>
     </footer>
 
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-2 transition-opacity duration-300 opacity-0 pointer-events-none z-50">
-        <i class="fa-solid fa-circle-check text-emerald-400"></i>
-        <span id="toastMsg" class="text-sm font-medium">保存成功！</span>
-    </div>
-
     <script>
-        // Sample Initial Data (Pure Chinese)
+        // Sample Initial Data
         const initialData = {
             kpiList: [
                 { name: '演示目标', target: '100%', actual: '95%', rate: 95, desc: '达到越南市场演示目标的 95%。' },
@@ -509,12 +501,25 @@
         };
 
         let appData = JSON.parse(localStorage.getItem('dianxiaomi_report_data')) || initialData;
+        let currentActiveTab = 'tab1';
 
         // Initialize App on DOM Load
         window.onload = function() {
             document.getElementById('printDate').innerText = new Date().toLocaleDateString('zh-CN');
             renderAll();
         };
+
+        // Auto Save to Local Storage Real-time
+        function autoSaveData() {
+            localStorage.setItem('dianxiaomi_report_data', JSON.stringify(appData));
+            const statusBadge = document.getElementById('headerSaveStatus');
+            if (statusBadge) {
+                statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>保存中...</span>`;
+                setTimeout(() => {
+                    statusBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>已实时保存</span>`;
+                }, 400);
+            }
+        }
 
         // Render All Sections
         function renderAll() {
@@ -526,6 +531,7 @@
 
         // Tab Switcher
         function switchTab(tabId) {
+            currentActiveTab = tabId;
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
 
@@ -545,6 +551,29 @@
             modal.classList.toggle('hidden');
         }
 
+        // ==================== PRINT ALL 4 TABS ====================
+        function printAllTabs() {
+            const mainContainer = document.getElementById('mainContainer');
+            
+            // Add custom class to show all tabs for printing
+            mainContainer.classList.add('print-all-tabs');
+            
+            // Unhide all tab elements temporarily
+            const allTabs = document.querySelectorAll('.tab-content');
+            allTabs.forEach(tab => tab.classList.remove('hidden'));
+
+            // Call window.print()
+            window.print();
+
+            // After printing, restore the tab user was previously viewing
+            mainContainer.classList.remove('print-all-tabs');
+            allTabs.forEach(tab => {
+                if (tab.id !== currentActiveTab) {
+                    tab.classList.add('hidden');
+                }
+            });
+        }
+
         // ==================== KPI FUNCTIONS ====================
         function renderKPI() {
             const tbody = document.getElementById('kpiTableBody');
@@ -553,31 +582,33 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.name)}" onchange="updateKPI(${index}, 'name', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.target)}" onchange="updateKPI(${index}, 'target', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.actual)}" onchange="updateKPI(${index}, 'actual', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="number" value="${item.rate}" onchange="updateKPI(${index}, 'rate', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-brand-blue font-bold focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.desc)}" onchange="updateKPI(${index}, 'desc', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.name)}" oninput="updateKPI(${index}, 'name', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.target)}" oninput="updateKPI(${index}, 'target', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.actual)}" oninput="updateKPI(${index}, 'actual', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="number" value="${item.rate}" oninput="updateKPI(${index}, 'rate', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-brand-blue font-bold focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.desc)}" oninput="updateKPI(${index}, 'desc', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
                     <td class="p-2 text-center no-print"><button onclick="removeKPI(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
             document.getElementById('kpiSummary').value = appData.kpiSummary || '';
-            document.getElementById('kpiSummary').onchange = (e) => appData.kpiSummary = e.target.value;
         }
 
         function addKpiRow() {
             appData.kpiList.push({ name: '', target: '', actual: '', rate: 100, desc: '' });
             renderKPI();
+            autoSaveData();
         }
 
         function updateKPI(index, field, value) {
             appData.kpiList[index][field] = field === 'rate' ? parseFloat(value) || 0 : value;
+            autoSaveData();
         }
 
         function removeKPI(index) {
             appData.kpiList.splice(index, 1);
             renderKPI();
+            autoSaveData();
         }
 
         // ==================== CUSTOMER FUNCTIONS ====================
@@ -588,30 +619,32 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.name)}" onchange="updateCustomer(${index}, 'name', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.profile)}" onchange="updateCustomer(${index}, 'profile', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.status)}" onchange="updateCustomer(${index}, 'status', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.chance)}" onchange="updateCustomer(${index}, 'chance', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.name)}" oninput="updateCustomer(${index}, 'name', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.profile)}" oninput="updateCustomer(${index}, 'profile', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.status)}" oninput="updateCustomer(${index}, 'status', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.chance)}" oninput="updateCustomer(${index}, 'chance', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
                     <td class="p-2 text-center no-print"><button onclick="removeCustomer(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
             document.getElementById('customerSummary').value = appData.customerSummary || '';
-            document.getElementById('customerSummary').onchange = (e) => appData.customerSummary = e.target.value;
         }
 
         function addCustomerRow() {
             appData.customerList.push({ name: '', profile: '', status: '', chance: '' });
             renderCustomers();
+            autoSaveData();
         }
 
         function updateCustomer(index, field, value) {
             appData.customerList[index][field] = value;
+            autoSaveData();
         }
 
         function removeCustomer(index) {
             appData.customerList.splice(index, 1);
             renderCustomers();
+            autoSaveData();
         }
 
         // ==================== TASK FUNCTIONS ====================
@@ -622,9 +655,9 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.title)}" onchange="updateTask(${index}, 'title', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.target)}" onchange="updateTask(${index}, 'target', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.support)}" onchange="updateTask(${index}, 'support', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.title)}" oninput="updateTask(${index}, 'title', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.target)}" oninput="updateTask(${index}, 'target', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.support)}" oninput="updateTask(${index}, 'support', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
                     <td class="p-2 text-center no-print"><button onclick="removeTask(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
@@ -634,15 +667,18 @@
         function addTaskRow() {
             appData.taskList.push({ title: '', target: '', support: '' });
             renderTasks();
+            autoSaveData();
         }
 
         function updateTask(index, field, value) {
             appData.taskList[index][field] = value;
+            autoSaveData();
         }
 
         function removeTask(index) {
             appData.taskList.splice(index, 1);
             renderTasks();
+            autoSaveData();
         }
 
         // ==================== ISSUE FUNCTIONS ====================
@@ -654,16 +690,16 @@
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
                     <td class="p-2">
-                        <select onchange="updateIssue(${index}, 'category', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none">
+                        <select onchange="updateIssue(${index}, 'category', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">
                             <option value="业务" ${item.category === '业务' ? 'selected' : ''}>业务</option>
                             <option value="客户" ${item.category === '客户' ? 'selected' : ''}>客户</option>
                             <option value="系统" ${item.category === '系统' ? 'selected' : ''}>系统</option>
                             <option value="体验" ${item.category === '体验' ? 'selected' : ''}>体验</option>
                         </select>
                     </td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.desc)}" onchange="updateIssue(${index}, 'desc', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.impact)}" onchange="updateIssue(${index}, 'impact', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
-                    <td class="p-2"><input type="text" value="${escapeHtml(item.support)}" onchange="updateIssue(${index}, 'support', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none print:bg-transparent print:border-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.desc)}" oninput="updateIssue(${index}, 'desc', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.impact)}" oninput="updateIssue(${index}, 'impact', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(item.support)}" oninput="updateIssue(${index}, 'support', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none"></td>
                     <td class="p-2 text-center no-print"><button onclick="removeIssue(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
@@ -673,30 +709,18 @@
         function addIssueRow() {
             appData.issueList.push({ category: '系统', desc: '', impact: '', support: '' });
             renderIssues();
+            autoSaveData();
         }
 
         function updateIssue(index, field, value) {
             appData.issueList[index][field] = value;
+            autoSaveData();
         }
 
         function removeIssue(index) {
             appData.issueList.splice(index, 1);
             renderIssues();
-        }
-
-        // ==================== STORAGE & UTILS ====================
-        function saveToLocalStorage() {
-            localStorage.setItem('dianxiaomi_report_data', JSON.stringify(appData));
-            showToast("已保存报告数据至浏览器！");
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = message;
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none');
-            }, 3000);
+            autoSaveData();
         }
 
         function escapeHtml(str) {
