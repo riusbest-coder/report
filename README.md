@@ -97,7 +97,6 @@
                     <div>
                         <div class="flex items-center space-x-2">
                             <span class="text-xl font-bold tracking-wide text-slate-900">店小秘</span>
-                            <span class="text-xs px-2 py-0.5 bg-brand-blue/10 text-brand-blue border border-brand-blue/30 rounded-full font-semibold">ERP Cross-Border</span>
                         </div>
                         <p class="text-xs text-slate-500">海外实施月度例会系统</p>
                     </div>
