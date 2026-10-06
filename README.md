@@ -52,21 +52,26 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94A3B8;
         }
-
-        /* Dynamic Auto-Fitting Textarea Styling */
-        .auto-expand-textarea {
-            resize: none !important;
-            overflow-y: hidden !important;
-            min-height: 32px;
-            word-break: break-word !important;
-            white-space: pre-wrap !important;
-            line-height: 1.4 !important;
-            padding: 0.375rem 0.5rem !important;
-            box-sizing: border-box !important;
-            transition: height 0.05s ease-out;
-        }
         
-        /* Print styles: Expand all text areas and render full text without borders/scrollbars */
+        .auto-expand {
+            resize: none;
+            overflow-y: hidden;
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 32px;
+            line-height: 1.4;
+        }
+
+        /* Styling select dropdown for issue category */
+        .category-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%20066FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1em;
+            padding-right: 1.8rem !important;
+        }
+
         @media print {
             .no-print {
                 display: none !important;
@@ -94,62 +99,62 @@
             .print-table td, .print-table th {
                 border-color: #cbd5e1 !important;
                 color: #0f172a !important;
-                white-space: normal !important;
             }
-            .auto-expand-textarea, input, textarea, select {
+            textarea, select {
                 border: none !important;
                 background: transparent !important;
-                padding: 0 !important;
+                padding: 2px 0 !important;
                 resize: none !important;
-                box-shadow: none !important;
-                height: auto !important;
-                overflow: visible !important;
-                white-space: pre-wrap !important;
+                appearance: none !important;
+                -webkit-appearance: none !important;
+            }
+            .category-select {
+                background-image: none !important;
+                padding-right: 0 !important;
             }
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- Top Header -->
+    <!-- Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Brand & Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="bg-brand-blue/10 p-2 rounded-xl border border-brand-blue/20 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-robot text-brand-blue text-2xl"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xl font-bold tracking-wide text-slate-900">店小秘</span>
+                <!-- Logo, Brand Name & fixed spacing to Region -->
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-brand-blue/10 p-2 rounded-xl border border-brand-blue/20 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-robot text-brand-blue text-2xl"></i>
                         </div>
-                        <p class="text-xs text-slate-500 hidden sm:block">海外实施月度例会系统</p>
+                        <div class="shrink-0">
+                            <span class="text-xl font-bold tracking-wide text-slate-900 block leading-none">店小秘</span>
+                            <span class="text-[10px] text-slate-500 font-medium">海外实施月度例会</span>
+                        </div>
+                    </div>
+
+                    <!-- Fixed divider and Region / Reporter Info -->
+                    <div class="flex items-center space-x-4 text-xs lg:text-sm border-l border-slate-300 pl-6 h-8">
+                        <div class="flex items-center space-x-1.5 shrink-0">
+                            <i class="fa-solid fa-earth-asia text-brand-blue"></i>
+                            <span class="text-slate-500 font-medium">区域：</span>
+                            <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">越南</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5 shrink-0">
+                            <i class="fa-solid fa-user-tie text-slate-400"></i>
+                            <span class="text-slate-500 font-medium">汇报人：</span>
+                            <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">阮红云</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Meta Details & Actions -->
+                <!-- Right Actions & Auto-save Status -->
                 <div class="flex items-center space-x-3 sm:space-x-4">
-                    <div class="hidden md:flex items-center space-x-4 text-xs lg:text-sm border-r border-slate-200 pr-4">
-                        <div class="flex items-center space-x-1.5">
-                            <i class="fa-solid fa-earth-asia text-slate-400"></i>
-                            <span class="text-slate-500">区域：</span>
-                            <span class="font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">越南</span>
-                        </div>
-                        <div class="flex items-center space-x-1.5">
-                            <i class="fa-solid fa-user-tie text-slate-400"></i>
-                            <span class="text-slate-500">汇报人：</span>
-                            <span class="font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">阮红云</span>
-                        </div>
-                    </div>
-
-                    <!-- Auto-save status -->
                     <div class="hidden sm:flex items-center space-x-1 text-xs text-emerald-600 font-medium bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200" id="headerSaveStatus">
                         <i class="fa-solid fa-circle-check"></i>
                         <span>已实时保存</span>
                     </div>
 
-                    <!-- Print / Export All PDF Button -->
                     <button onclick="printAllTabs()" class="px-3.5 py-2 bg-brand-blue hover:bg-blue-700 text-white font-medium rounded-lg text-xs sm:text-sm transition flex items-center space-x-1.5 shadow-md shadow-brand-blue/20 shrink-0">
                         <i class="fa-solid fa-file-pdf"></i>
                         <span>打印 / 导出 PDF (全汇报)</span>
@@ -159,10 +164,10 @@
         </div>
     </header>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow w-full" id="mainContainer">
         
-        <!-- Tab Navigation Bar -->
+        <!-- Tab Navigation -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 mb-6 gap-3 no-print">
             <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-none" id="tabNav">
                 <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-t-lg font-semibold text-xs sm:text-sm transition flex items-center space-x-1.5 whitespace-nowrap bg-brand-blue text-white border-b-2 border-brand-blue shadow-sm">
@@ -189,7 +194,7 @@
             </button>
         </div>
 
-        <!-- Print Title Section (Only Visible when Printing PDF) -->
+        <!-- Print Header Title -->
         <div class="hidden print:block mb-6 border-b-2 border-slate-900 pb-4">
             <div class="flex justify-between items-center">
                 <div>
@@ -204,7 +209,7 @@
             </div>
         </div>
 
-        <!-- ==================== TAB 1: 绩效目标进展 ==================== -->
+        <!-- TAB 1: 绩效目标进展 -->
         <div id="tab1" class="tab-content space-y-6">
             <div class="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm print-card">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -213,7 +218,7 @@
                             <span class="w-2.5 h-5 sm:h-6 bg-brand-blue rounded-full inline-block"></span>
                             <span>1. 绩效目标达成情况</span>
                         </h2>
-                        <p class="text-xs text-slate-500 mt-1">对照 KPI 指标，明确目标值、实际完成值并说明偏差原因（所有文本框根据文字内容自动等高匹配）。</p>
+                        <p class="text-xs text-slate-500 mt-1">对照 KPI 指标，明确目标值、实际完成值并说明偏差原因。</p>
                     </div>
                     <button onclick="addKpiRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
                         <i class="fa-solid fa-plus"></i>
@@ -225,32 +230,29 @@
                     <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 min-w-[140px] w-1/5">指标名称</th>
-                                <th scope="col" class="px-3 py-3 min-w-[100px] w-1/8">目标值</th>
-                                <th scope="col" class="px-3 py-3 min-w-[100px] w-1/8">实际完成值</th>
-                                <th scope="col" class="px-3 py-3 min-w-[90px] w-1/12">达成率 (%)</th>
-                                <th scope="col" class="px-3 py-3 min-w-[220px]">偏差说明 / 改进动作</th>
+                                <th scope="col" class="px-3 py-3 w-[20%] min-w-[140px]">指标名称</th>
+                                <th scope="col" class="px-3 py-3 w-[15%] min-w-[90px]">目标值</th>
+                                <th scope="col" class="px-3 py-3 w-[15%] min-w-[90px]">实际完成值</th>
+                                <th scope="col" class="px-3 py-3 w-[12%] min-w-[90px]">达成率 (%)</th>
+                                <th scope="col" class="px-3 py-3 w-[33%] min-w-[180px]">偏差说明 / 改进动作</th>
                                 <th scope="col" class="px-2 py-3 w-10 text-center no-print">操作</th>
                             </tr>
                         </thead>
-                        <tbody id="kpiTableBody" class="divide-y divide-slate-200 bg-white">
-                            <!-- Rows injected via JS -->
-                        </tbody>
+                        <tbody id="kpiTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
                     </table>
                 </div>
 
-                <!-- KPI Summary Box -->
                 <div class="mt-5 pt-4 border-t border-slate-200">
                     <label class="block text-xs font-semibold text-slate-800 mb-2 flex items-center space-x-1">
                         <i class="fa-solid fa-pen-to-square text-brand-blue"></i>
                         <span>达成情况小结（亮点 / 未达标原因）：</span>
                     </label>
-                    <textarea id="kpiSummary" rows="1" oninput="autoExpand(this); autoSaveData()" class="auto-expand-textarea w-full bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="请填写：本月核心亮点、未达标原因及后续改进计划..."></textarea>
+                    <textarea id="kpiSummary" rows="2" oninput="autoExpand(this); autoSaveData()" class="auto-expand w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="请填写：本月核心亮点、未达标原因及后续改进计划..."></textarea>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== TAB 2: 客户跟进情况 ==================== -->
+        <!-- TAB 2: 客户跟进情况 -->
         <div id="tab2" class="tab-content space-y-6 hidden">
             <div class="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm print-card">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -259,7 +261,7 @@
                             <span class="w-2.5 h-5 sm:h-6 bg-brand-blue rounded-full inline-block"></span>
                             <span>2. 客户跟进情况</span>
                         </h2>
-                        <p class="text-xs text-slate-500 mt-1">围绕客户画像、最新动态及付费转化机会展开（框体尺寸紧密包裹所有内容）。</p>
+                        <p class="text-xs text-slate-500 mt-1">围绕客户画像、最新动态及付费转化机会展开。</p>
                     </div>
                     <button onclick="addCustomerRow()" class="no-print px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue border border-brand-blue/30 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 self-start sm:self-auto">
                         <i class="fa-solid fa-plus"></i>
@@ -271,31 +273,28 @@
                     <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 min-w-[140px] w-1/5">客户名称</th>
-                                <th scope="col" class="px-3 py-3 min-w-[180px] w-1/4">客户画像</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px] w-1/4">最新动态</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px] w-1/4">付费转化机会点</th>
+                                <th scope="col" class="px-3 py-3 w-[20%] min-w-[130px]">客户名称</th>
+                                <th scope="col" class="px-3 py-3 w-[25%] min-w-[160px]">客户画像</th>
+                                <th scope="col" class="px-3 py-3 w-[25%] min-w-[180px]">最新动态</th>
+                                <th scope="col" class="px-3 py-3 w-[25%] min-w-[180px]">付费转化机会点</th>
                                 <th scope="col" class="px-2 py-3 w-10 text-center no-print">操作</th>
                             </tr>
                         </thead>
-                        <tbody id="customerTableBody" class="divide-y divide-slate-200 bg-white">
-                            <!-- Rows injected via JS -->
-                        </tbody>
+                        <tbody id="customerTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
                     </table>
                 </div>
 
-                <!-- Customer Summary Box -->
                 <div class="mt-5 pt-4 border-t border-slate-200">
                     <label class="block text-xs font-semibold text-slate-800 mb-2 flex items-center space-x-1">
                         <i class="fa-solid fa-pen-to-square text-brand-blue"></i>
                         <span>关键动态与转化机会小结：</span>
                     </label>
-                    <textarea id="customerSummary" rows="1" oninput="autoExpand(this); autoSaveData()" class="auto-expand-textarea w-full bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="小结：本月重点客户、存在风险的客户群、潜在变现挖掘点..."></textarea>
+                    <textarea id="customerSummary" rows="2" oninput="autoExpand(this); autoSaveData()" class="auto-expand w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-800 focus:ring-1 focus:ring-brand-blue focus:border-brand-blue focus:outline-none focus:bg-white" placeholder="小结：本月重点客户、存在风险的客户群、潜在变现挖掘点..."></textarea>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== TAB 3: 下月重点工作 ==================== -->
+        <!-- TAB 3: 下月重点工作 -->
         <div id="tab3" class="tab-content space-y-6 hidden">
             <div class="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm print-card">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -316,21 +315,19 @@
                     <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 min-w-[220px] w-1/3">重点工作说明</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px] w-1/3">目标 / 交付物</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px] w-1/3">需求支持/协同</th>
+                                <th scope="col" class="px-3 py-3 w-[35%] min-w-[200px]">重点工作说明</th>
+                                <th scope="col" class="px-3 py-3 w-[30%] min-w-[180px]">目标 / 交付物</th>
+                                <th scope="col" class="px-3 py-3 w-[30%] min-w-[180px]">需求支持/协同</th>
                                 <th scope="col" class="px-2 py-3 w-10 text-center no-print">操作</th>
                             </tr>
                         </thead>
-                        <tbody id="taskTableBody" class="divide-y divide-slate-200 bg-white">
-                            <!-- Rows injected via JS -->
-                        </tbody>
+                        <tbody id="taskTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== TAB 4: 卡点 / 异常问题 ==================== -->
+        <!-- TAB 4: 卡点 / 异常问题 -->
         <div id="tab4" class="tab-content space-y-6 hidden">
             <div class="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm print-card">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -351,16 +348,14 @@
                     <table class="w-full text-xs sm:text-sm text-left text-slate-700 print-table">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200 font-bold">
                             <tr>
-                                <th scope="col" class="px-3 py-3 w-28">问题分类</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px] w-1/3">问题描述</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px] w-1/3">影响与已尝试措施</th>
-                                <th scope="col" class="px-3 py-3 min-w-[200px] w-1/3">需协调/支持事项</th>
+                                <th scope="col" class="px-3 py-3 w-[15%] min-w-[110px]">问题分类</th>
+                                <th scope="col" class="px-3 py-3 w-[30%] min-w-[180px]">问题描述</th>
+                                <th scope="col" class="px-3 py-3 w-[25%] min-w-[180px]">影响与已尝试措施</th>
+                                <th scope="col" class="px-3 py-3 w-[25%] min-w-[180px]">需协调/支持事项</th>
                                 <th scope="col" class="px-2 py-3 w-10 text-center no-print">操作</th>
                             </tr>
                         </thead>
-                        <tbody id="issueTableBody" class="divide-y divide-slate-200 bg-white">
-                            <!-- Rows injected via JS -->
-                        </tbody>
+                        <tbody id="issueTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
                     </table>
                 </div>
             </div>
@@ -368,10 +363,9 @@
 
     </main>
 
-    <!-- KPI Standard Reference Modal -->
+    <!-- Reference Modal -->
     <div id="referenceModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden no-print">
         <div class="bg-white border border-slate-200 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl">
-            <!-- Modal Header -->
             <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50 rounded-t-2xl">
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-book-open text-brand-blue text-lg"></i>
@@ -382,9 +376,7 @@
                 </button>
             </div>
             
-            <!-- Modal Body (Scrollable) -->
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 text-xs text-slate-700">
-                <!-- Implementation Role KPI -->
                 <div>
                     <h4 class="text-xs sm:text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-user-gear"></i>
@@ -430,7 +422,6 @@
                     </div>
                 </div>
 
-                <!-- Customer Support Role KPI -->
                 <div>
                     <h4 class="text-xs sm:text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-headset"></i>
@@ -477,7 +468,6 @@
                 </div>
             </div>
 
-            <!-- Modal Footer -->
             <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end rounded-b-2xl">
                 <button onclick="toggleReferenceModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold">
                     关闭
@@ -494,59 +484,49 @@
     </footer>
 
     <script>
-        // Initial Mock Data
         const initialData = {
             kpiList: [
-                { name: '演示目标', target: '100%', actual: '95%', rate: 95, desc: '达到越南市场演示目标的 95%。客户反馈流程顺畅，后续需保持并进一步扩展演示规模。' },
-                { name: '日活转化率', target: '30%', actual: '28%', rate: 93.3, desc: '东南亚区域需在下阶段加速推进。针对大型卖家团队提供针对性功能的深入指导。' },
-                { name: '售后跟进', target: '100%', actual: '100%', rate: 100, desc: '已按时完成 SA/A 级客户定期回访报告，满意度评价保持高位。' },
-                { name: '学习提效', target: '95分', actual: '96分', rate: 101, desc: '已完成内部培训及指导文档编写，团队技能考核全部达标。' }
+                { name: '演示目标', target: '100%', actual: '95%', rate: 95, desc: '达到越南市场演示目标的 95%。' },
+                { name: '日活转化率', target: '30%', actual: '28%', rate: 93.3, desc: '东南亚区域需在下阶段加速推进。' },
+                { name: '售后跟进', target: '100%', actual: '100%', rate: 100, desc: '已按时完成 SA/A 级客户定期回访报告。' },
+                { name: '学习提效', target: '95分', actual: '96分', rate: 101, desc: '已完成内部培训及指导文档编写。' }
             ],
             kpiSummary: '本月团队在 SA 重点客户服务指标上表现良好，日活转化率在深入演示环节仍需加强。',
             customerList: [
-                { name: '客户 A (Shopee 大卖家)', profile: '大卖家 / 多渠道仓储对接需求，月单量超 5 万单', status: '已安装试用 ERP，反馈良好，目前正在试用多仓库存同步模块', chance: '预计 11 月转化尊享版 (12,000,000 VND)' },
-                { name: '店铺 B (Lazada 品牌商)', profile: '服装主理人 / 订单高效管理及精细化财务核算需求', status: '需协助配置自动打印面单及仓库拣货单', chance: '预计下周升级旗舰版' }
+                { name: '客户 A (Shopee 大卖家)', profile: '大卖家 / 多渠道仓储对接需求', status: '已安装试用 ERP，反馈良好', chance: '预计 11 月转化尊享版 (12,000,000 VND)' },
+                { name: '店铺 B (Lazada 品牌商)', profile: '服装主理人 / 订单管理需求', status: '需协助配置自动打印面单', chance: '预计下周升级旗舰版' }
             ],
             customerSummary: '重点客户 A 进展非常顺利，需集中力量解决店铺 B 遗留的服务工单。',
             taskList: [
-                { title: '优化 VIP 客户 Onboarding 流程', target: '指导周期由 3 天缩短至 1 天，提高新手留存率', support: '需技术团队支持 API 仓库对接与批量导入调试' },
-                { title: '组织新功能线上研讨会 (Webinar)', target: '至少 50 家企业参会，现场转化 10% 意向付费客户', support: '越南市场团队协助宣传推广及场地招募' }
+                { title: '优化 VIP 客户 Onboarding 流程', target: '指导周期由 3 天缩短至 1 天', support: '需技术团队支持 API 仓库对接' },
+                { title: '组织新功能线上研讨会 (Webinar)', target: '至少 50 家企业参会', support: '越南市场团队协助宣传推广' }
             ],
             issueList: [
-                { category: '系统', desc: '高峰期（20点-22点）大批量同步订单网络卡顿，影响大卖家处理速度', impact: '客户反馈稍慢，已提交技术排查并建立紧急跟进群', support: '需开发优化服务器带宽与并发接口处理速度' },
-                { category: '业务', desc: '新税收政策导致客户需要增加发票字段与定制抬头格式', impact: '目前临时人工指导处理，增加工作量', support: '需系统更新标准发票模板' }
+                { category: '系统', desc: '高峰期（20点-22点）大批量同步订单网络卡顿', impact: '客户反馈稍慢，已提交技术排查', support: '需开发优化服务器带宽与并发' },
+                { category: '业务', desc: '新税收政策导致客户需要增加发票字段', impact: '目前临时人工指导处理', support: '需系统更新标准发票模板' }
             ]
         };
 
         let appData = JSON.parse(localStorage.getItem('dianxiaomi_report_data')) || initialData;
         let currentActiveTab = 'tab1';
 
-        // Auto-fit height calculation function for textareas
-        function autoExpand(element) {
-            if (!element) return;
-            element.style.height = 'auto';
-            element.style.height = (element.scrollHeight) + 'px';
-        }
-
-        // Recalculate heights for all textareas across all elements
-        function autoExpandAll() {
-            requestAnimationFrame(() => {
-                document.querySelectorAll('textarea').forEach(el => {
-                    el.style.height = 'auto';
-                    el.style.height = (el.scrollHeight) + 'px';
-                });
-            });
-        }
-
-        // Initialize App on DOM Load
         window.onload = function() {
             document.getElementById('printDate').innerText = new Date().toLocaleDateString('zh-CN');
             renderAll();
-            // Window resize re-calculation to keep tight fit
-            window.addEventListener('resize', autoExpandAll);
         };
 
-        // Auto Save to Local Storage Real-time
+        function autoExpand(element) {
+            if (!element) return;
+            element.style.height = 'auto';
+            element.style.height = element.scrollHeight + 'px';
+        }
+
+        function triggerAllAutoExpand() {
+            setTimeout(() => {
+                document.querySelectorAll('textarea').forEach(el => autoExpand(el));
+            }, 10);
+        }
+
         function autoSaveData() {
             localStorage.setItem('dianxiaomi_report_data', JSON.stringify(appData));
             const statusBadge = document.getElementById('headerSaveStatus');
@@ -554,20 +534,18 @@
                 statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>保存中...</span>`;
                 setTimeout(() => {
                     statusBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>已实时保存</span>`;
-                }, 300);
+                }, 400);
             }
         }
 
-        // Render All Sections
         function renderAll() {
             renderKPI();
             renderCustomers();
             renderTasks();
             renderIssues();
-            autoExpandAll();
+            triggerAllAutoExpand();
         }
 
-        // Tab Switcher
         function switchTab(tabId) {
             currentActiveTab = tabId;
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -582,44 +560,36 @@
             activeBtn.classList.remove('text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-100');
             activeBtn.classList.add('bg-brand-blue', 'text-white', 'border-b-2', 'border-brand-blue', 'shadow-sm');
             
-            autoExpandAll();
+            triggerAllAutoExpand();
         }
 
-        // Reference Modal Toggle
         function toggleReferenceModal() {
             const modal = document.getElementById('referenceModal');
             modal.classList.toggle('hidden');
         }
 
-        // ==================== PRINT ALL 4 TABS ====================
         function printAllTabs() {
             const mainContainer = document.getElementById('mainContainer');
-            
             mainContainer.classList.add('print-all-tabs');
             
             const allTabs = document.querySelectorAll('.tab-content');
             allTabs.forEach(tab => tab.classList.remove('hidden'));
 
-            autoExpandAll();
+            triggerAllAutoExpand();
 
             setTimeout(() => {
                 window.print();
-
                 mainContainer.classList.remove('print-all-tabs');
                 allTabs.forEach(tab => {
                     if (tab.id !== currentActiveTab) {
                         tab.classList.add('hidden');
                     }
                 });
-            }, 150);
+                triggerAllAutoExpand();
+            }, 100);
         }
 
-        // Helper to create Auto-Expanding Textarea Field
-        function createTextareaCell(value, onInputFn, customClass = '') {
-            return `<textarea rows="1" oninput="autoExpand(this); ${onInputFn}" class="auto-expand-textarea w-full bg-slate-50 border border-slate-300 rounded text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none ${customClass}">${escapeHtml(value)}</textarea>`;
-        }
-
-        // ==================== KPI FUNCTIONS ====================
+        // ==================== KPI ====================
         function renderKPI() {
             const tbody = document.getElementById('kpiTableBody');
             tbody.innerHTML = '';
@@ -627,18 +597,18 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-1.5 align-top">${createTextareaCell(item.name, `updateKPI(${index}, 'name', this.value)`)}</td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.target, `updateKPI(${index}, 'target', this.value)`)}</td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.actual, `updateKPI(${index}, 'actual', this.value)`)}</td>
-                    <td class="p-1.5 align-top"><input type="number" value="${item.rate}" oninput="updateKPI(${index}, 'rate', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1.5 text-xs text-brand-blue font-bold focus:bg-white focus:border-brand-blue focus:outline-none"></td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.desc, `updateKPI(${index}, 'desc', this.value)`)}</td>
-                    <td class="p-1.5 align-top text-center no-print"><button onclick="removeKPI(${index})" class="text-red-500 hover:text-red-700 p-1.5" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.name)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.target)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'actual', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.actual)}</textarea></td>
+                    <td class="p-2"><input type="number" value="${item.rate}" oninput="updateKPI(${index}, 'rate', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-brand-blue font-bold focus:bg-white focus:border-brand-blue focus:outline-none"></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateKPI(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.desc)}</textarea></td>
+                    <td class="p-2 text-center no-print"><button onclick="removeKPI(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
-            const kpiSummaryEl = document.getElementById('kpiSummary');
-            kpiSummaryEl.value = appData.kpiSummary || '';
-            autoExpandAll();
+            const summaryEl = document.getElementById('kpiSummary');
+            summaryEl.value = appData.kpiSummary || '';
+            autoExpand(summaryEl);
         }
 
         function addKpiRow() {
@@ -658,7 +628,7 @@
             autoSaveData();
         }
 
-        // ==================== CUSTOMER FUNCTIONS ====================
+        // ==================== CUSTOMERS ====================
         function renderCustomers() {
             const tbody = document.getElementById('customerTableBody');
             tbody.innerHTML = '';
@@ -666,16 +636,17 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-1.5 align-top">${createTextareaCell(item.name, `updateCustomer(${index}, 'name', this.value)`)}</td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.profile, `updateCustomer(${index}, 'profile', this.value)`)}</td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.status, `updateCustomer(${index}, 'status', this.value)`)}</td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.chance, `updateCustomer(${index}, 'chance', this.value)`)}</td>
-                    <td class="p-1.5 align-top text-center no-print"><button onclick="removeCustomer(${index})" class="text-red-500 hover:text-red-700 p-1.5" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.name)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'profile', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.profile)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'status', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.status)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'chance', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.chance)}</textarea></td>
+                    <td class="p-2 text-center no-print"><button onclick="removeCustomer(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
-            document.getElementById('customerSummary').value = appData.customerSummary || '';
-            autoExpandAll();
+            const summaryEl = document.getElementById('customerSummary');
+            summaryEl.value = appData.customerSummary || '';
+            autoExpand(summaryEl);
         }
 
         function addCustomerRow() {
@@ -695,7 +666,7 @@
             autoSaveData();
         }
 
-        // ==================== TASK FUNCTIONS ====================
+        // ==================== TASKS ====================
         function renderTasks() {
             const tbody = document.getElementById('taskTableBody');
             tbody.innerHTML = '';
@@ -703,14 +674,13 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-1.5 align-top">${createTextareaCell(item.title, `updateTask(${index}, 'title', this.value)`)}</td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.target, `updateTask(${index}, 'target', this.value)`)}</td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.support, `updateTask(${index}, 'support', this.value)`)}</td>
-                    <td class="p-1.5 align-top text-center no-print"><button onclick="removeTask(${index})" class="text-red-500 hover:text-red-700 p-1.5" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'title', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.title)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.target)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.support)}</textarea></td>
+                    <td class="p-2 text-center no-print"><button onclick="removeTask(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
-            autoExpandAll();
         }
 
         function addTaskRow() {
@@ -730,7 +700,7 @@
             autoSaveData();
         }
 
-        // ==================== ISSUE FUNCTIONS ====================
+        // ==================== ISSUES ====================
         function renderIssues() {
             const tbody = document.getElementById('issueTableBody');
             tbody.innerHTML = '';
@@ -738,22 +708,21 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="p-1.5 align-top">
-                        <select onchange="updateIssue(${index}, 'category', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded px-2 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">
-                            <option value="业务" ${item.category === '业务' ? 'selected' : ''}>业务</option>
-                            <option value="客户" ${item.category === '客户' ? 'selected' : ''}>客户</option>
-                            <option value="系统" ${item.category === '系统' ? 'selected' : ''}>系统</option>
-                            <option value="体验" ${item.category === '体验' ? 'selected' : ''}>体验</option>
+                    <td class="p-2">
+                        <select onchange="updateIssue(${index}, 'category', this.value)" class="category-select w-full bg-blue-50/60 border border-brand-blue/30 rounded px-2.5 py-1 text-xs font-bold text-brand-blue focus:bg-white focus:border-brand-blue focus:outline-none">
+                            <option value="业务" ${item.category === '业务' ? 'selected' : ''}>📌 业务</option>
+                            <option value="客户" ${item.category === '客户' ? 'selected' : ''}>👤 客户</option>
+                            <option value="系统" ${item.category === '系统' ? 'selected' : ''}>💻 系统</option>
+                            <option value="体验" ${item.category === '体验' ? 'selected' : ''}>✨ 体验</option>
                         </select>
                     </td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.desc, `updateIssue(${index}, 'desc', this.value)`)}</td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.impact, `updateIssue(${index}, 'impact', this.value)`)}</td>
-                    <td class="p-1.5 align-top">${createTextareaCell(item.support, `updateIssue(${index}, 'support', this.value)`)}</td>
-                    <td class="p-1.5 align-top text-center no-print"><button onclick="removeIssue(${index})" class="text-red-500 hover:text-red-700 p-1.5" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.desc)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'impact', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.impact)}</textarea></td>
+                    <td class="p-2"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none">${escapeHtml(item.support)}</textarea></td>
+                    <td class="p-2 text-center no-print"><button onclick="removeIssue(${index})" class="text-red-500 hover:text-red-700 p-1" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
-            autoExpandAll();
         }
 
         function addIssueRow() {
@@ -777,6 +746,8 @@
             if (!str) return '';
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
+
+        window.addEventListener('resize', triggerAllAutoExpand);
     </script>
 </body>
 </html>
