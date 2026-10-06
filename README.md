@@ -72,6 +72,7 @@
             padding-right: 1.8rem !important;
         }
 
+        /* Full Text Display in PDF / Print Mode */
         @media print {
             .no-print {
                 display: none !important;
@@ -100,13 +101,19 @@
                 border-color: #cbd5e1 !important;
                 color: #0f172a !important;
             }
+            /* Expand textareas completely for full text printing without scrollbars */
             textarea, select {
                 border: none !important;
                 background: transparent !important;
-                padding: 2px 0 !important;
+                padding: 0 !important;
                 resize: none !important;
                 appearance: none !important;
                 -webkit-appearance: none !important;
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                white-space: pre-wrap !important;
+                word-break: break-word !important;
             }
             .category-select {
                 background-image: none !important;
@@ -121,7 +128,7 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Logo, Brand Name & fixed spacing to Region -->
+                <!-- Logo, Brand Name & Fixed spacing to Region -->
                 <div class="flex items-center space-x-6">
                     <div class="flex items-center space-x-3">
                         <div class="bg-brand-blue/10 p-2 rounded-xl border border-brand-blue/20 flex items-center justify-center shrink-0">
