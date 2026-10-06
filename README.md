@@ -122,11 +122,6 @@
                         <button onclick="saveToLocalStorage()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition flex items-center space-x-1.5 border border-slate-300" title="暂存至浏览器">
                             <i class="fa-solid fa-floppy-disk text-emerald-600"></i>
                             <span class="hidden sm:inline">保存</span>
-                        </button>
-                        <button onclick="exportDataJSON()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition flex items-center space-x-1.5 border border-slate-300" title="导出 JSON 数据文件">
-                            <i class="fa-solid fa-download text-blue-600"></i>
-                            <span class="hidden sm:inline">导出 JSON</span>
-                        </button>
                         <label class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition flex items-center space-x-1.5 border border-slate-300 cursor-pointer" title="从 JSON 文件导入数据">
                             <i class="fa-solid fa-upload text-amber-600"></i>
                             <span class="hidden sm:inline">导入 JSON</span>
