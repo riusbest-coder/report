@@ -85,15 +85,22 @@
             }
             .print-all-tabs .tab-content {
                 display: block !important;
-                margin-bottom: 2rem !important;
-                page-break-inside: avoid;
+                margin-bottom: 0 !important;
+                /* ÉP MỖI PHẦN / TAB RA 1 TRANG RIÊNG */
+                break-before: page;
+                page-break-before: always;
             }
+            /* Phần đầu tiên (Tab 1) không tạo trang trống ở đầu */
+            .print-all-tabs #tab1 {
+                break-before: auto;
+                page-break-before: auto;
+            }
+
             .print-card {
                 background: white !important;
                 border: 1px solid #cbd5e1 !important;
                 color: black !important;
                 box-shadow: none !important;
-                break-inside: avoid;
             }
             .print-table th {
                 background-color: #f1f5f9 !important;
@@ -578,7 +585,7 @@
                                     <td class="p-2.5 border-r border-slate-200 leading-relaxed">
                                         • X = 所有考核成绩平均分：所有考核成绩平均分 ≤ 96, X=10分; 88 ≤ 所有考核成绩平均分 ≤ 95, X=8分; 80 ≤ 所有考核成绩平均分 ≤ 87, X=7分; 79 ≤ 所有考核成绩平均分, X=5分。<br>
                                         • Y = 帮助文档维护：抽查内容没有错误，不被客户投诉帮助文档有问题（0问题，得分10分; 1-2个问题，得分6分; 3个问题及以上，得分0分）。<br>
-                                        • Q = QA每周反馈（针对客户常见咨询，整理QA，有清晰的问题描述、解决步骤，不能有错别字，每周按时按量提供）：符合要求按时按量提交，Q=10分; 按时但出现2次内不符合质量的情况，Q=8分; 符合质量但是出现1次不按时提交，Q=8分; 超过3次及以上不符合质量，2次及以上不按时提交，Q=5分; 超过4次及以上不符合质量，3次及以上不按时提交，Q=0分。
+                                        • Q = QA每周反馈（针对客户常见咨询，整理QA，有清晰的问题描述、解决步骤，不能有错别字，每周按时按量提供）：符合要求按时按量提交，Q=10分; 按时但出现2次内不符合质量的情况，Q=8分; 符合质量但是出现1次不按时提交，Q=8分; 超过3次及以上不符合质量，2次及以上不按时提交，Q=5分; 超过4次及以上不符合质量，3次及以上不按时提交 Q=0分。
                                     </td>
                                     <td class="p-2.5 text-center text-brand-blue font-bold">30%</td>
                                 </tr>
@@ -604,7 +611,6 @@
     </footer>
 
     <script>
-        // DÁN URL WEB APP APPS SCRIPT CỦA BẠN VÀO ĐÂY
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0cUg84tYyziDtIf30l0A2HgYW-lhMYtRGyeG7jigL9HXXzBhuloMQj2I1V4gkKJsqRQ/exec';
 
         const initialData = {
@@ -734,11 +740,17 @@
             }, 150);
         }
 
-        function makePrintCell(val) {
-            return `<div class="print-text-view">${escapeHtml(val)}</div>`;
+        function makePrintCell(val, id) {
+            const idAttr = id ? `id="${id}"` : '';
+            return `<div ${idAttr} class="print-text-view">${escapeHtml(val)}</div>`;
         }
 
-        // ==================== HÀM LƯU DỮ LIỆU SANG GOOGLE SHEET / EXCEL ====================
+        function updatePrintCell(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = val;
+        }
+
+        // ==================== LƯU GOOGLE SHEET ====================
         function saveToGoogleSheet() {
             const btn = document.getElementById('btnSaveExcel');
             const originalText = btn.innerHTML;
@@ -780,9 +792,9 @@
                 else if (rateVal < 80) { barColor = 'bg-rose-500'; textColor = 'text-rose-600'; }
 
                 tr.innerHTML = `
-                    <td class="p-2.5"><input type="text" value="${escapeHtml(item.name)}" oninput="updateKPIValue(${index}, 'name', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.name)}</td>
-                    <td class="p-2.5"><input type="text" value="${escapeHtml(item.target)}" oninput="updateKPIValue(${index}, 'target', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.target)}</td>
-                    <td class="p-2.5"><input type="text" value="${escapeHtml(item.actual)}" oninput="updateKPIValue(${index}, 'actual', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.actual)}</td>
+                    <td class="p-2.5"><input type="text" value="${escapeHtml(item.name)}" oninput="updateKPIValue(${index}, 'name', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.name, `pv_kpi_name_${index}`)}</td>
+                    <td class="p-2.5"><input type="text" value="${escapeHtml(item.target)}" oninput="updateKPIValue(${index}, 'target', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.target, `pv_kpi_target_${index}`)}</td>
+                    <td class="p-2.5"><input type="text" value="${escapeHtml(item.actual)}" oninput="updateKPIValue(${index}, 'actual', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${makePrintCell(item.actual, `pv_kpi_actual_${index}`)}</td>
                     <td class="p-2.5">
                         <div class="no-print space-y-1.5">
                             <div class="flex items-center justify-between text-xs font-bold ${textColor}" id="kpi-text-container-${index}">
@@ -792,9 +804,9 @@
                                 <div id="kpi-bar-${index}" class="${barColor} h-2 rounded-full transition-all duration-300" style="width: ${Math.min(rateVal, 100)}%"></div>
                             </div>
                         </div>
-                        <div id="kpi-print-${index}">${makePrintCell(item.rate + '%')}</div>
+                        ${makePrintCell((item.rate || 0) + '%', `pv_kpi_rate_${index}`)}
                     </td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateKPIValue(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.desc)}</textarea>${makePrintCell(item.desc)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateKPIValue(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.desc)}</textarea>${makePrintCell(item.desc, `pv_kpi_desc_${index}`)}</td>
                     <td class="p-2.5 text-center no-print"><button onclick="removeKPI(${index})" class="text-slate-400 hover:text-rose-600 p-1.5 transition" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
@@ -807,13 +819,17 @@
 
         function updateKPIValue(index, field, value) {
             appData.kpiList[index][field] = field === 'rate' ? (value === '' ? '' : parseFloat(value) || 0) : value;
-            autoSaveData();
+            
+            if (field === 'rate') {
+                updatePrintCell(`pv_kpi_${field}_${index}`, (value || 0) + '%');
+            } else {
+                updatePrintCell(`pv_kpi_${field}_${index}`, value);
+            }
 
             if (field === 'rate') {
                 const rateVal = parseFloat(value) || 0;
                 const progressBar = document.getElementById(`kpi-bar-${index}`);
                 const textContainer = document.getElementById(`kpi-text-container-${index}`);
-                const printText = document.getElementById(`kpi-print-${index}`);
 
                 if (progressBar) {
                     progressBar.style.width = `${Math.min(Math.max(rateVal, 0), 100)}%`;
@@ -837,11 +853,9 @@
                         textContainer.classList.add('text-brand-blue');
                     }
                 }
-
-                if (printText) {
-                    printText.innerHTML = makePrintCell((value || 0) + '%');
-                }
             }
+
+            autoSaveData();
         }
 
         function addKpiRow() {
@@ -864,10 +878,10 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
                 tr.innerHTML = `
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-900 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.name)}</textarea>${makePrintCell(item.name)}</td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'profile', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.profile)}</textarea>${makePrintCell(item.profile)}</td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'status', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.status)}</textarea>${makePrintCell(item.status)}</td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'chance', this.value)" class="auto-expand w-full bg-emerald-50/60 border border-emerald-200 rounded-lg px-2.5 py-1.5 text-xs text-emerald-800 font-medium focus:bg-white focus:border-emerald-500 focus:outline-none transition">${escapeHtml(item.chance)}</textarea>${makePrintCell(item.chance)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'name', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-900 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.name)}</textarea>${makePrintCell(item.name, `pv_cus_name_${index}`)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'profile', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.profile)}</textarea>${makePrintCell(item.profile, `pv_cus_profile_${index}`)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'status', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.status)}</textarea>${makePrintCell(item.status, `pv_cus_status_${index}`)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateCustomer(${index}, 'chance', this.value)" class="auto-expand w-full bg-emerald-50/60 border border-emerald-200 rounded-lg px-2.5 py-1.5 text-xs text-emerald-800 font-medium focus:bg-white focus:border-emerald-500 focus:outline-none transition">${escapeHtml(item.chance)}</textarea>${makePrintCell(item.chance, `pv_cus_chance_${index}`)}</td>
                     <td class="p-2.5 text-center no-print"><button onclick="removeCustomer(${index})" class="text-slate-400 hover:text-rose-600 p-1.5 transition" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
@@ -886,6 +900,7 @@
 
         function updateCustomer(index, field, value) {
             appData.customerList[index][field] = value;
+            updatePrintCell(`pv_cus_${field}_${index}`, value);
             autoSaveData();
         }
 
@@ -903,9 +918,9 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
                 tr.innerHTML = `
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'title', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.title)}</textarea>${makePrintCell(item.title)}</td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.target)}</textarea>${makePrintCell(item.target)}</td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.support)}</textarea>${makePrintCell(item.support)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'title', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.title)}</textarea>${makePrintCell(item.title, `pv_task_title_${index}`)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'target', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.target)}</textarea>${makePrintCell(item.target, `pv_task_target_${index}`)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateTask(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.support)}</textarea>${makePrintCell(item.support, `pv_task_support_${index}`)}</td>
                     <td class="p-2.5 text-center no-print"><button onclick="removeTask(${index})" class="text-slate-400 hover:text-rose-600 p-1.5 transition" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
@@ -920,6 +935,7 @@
 
         function updateTask(index, field, value) {
             appData.taskList[index][field] = value;
+            updatePrintCell(`pv_task_${field}_${index}`, value);
             autoSaveData();
         }
 
@@ -944,12 +960,12 @@
                             <option value="系统" ${item.category === '系统' ? 'selected' : ''}>💻 系统</option>
                             <option value="体验" ${item.category === '体验' ? 'selected' : ''}>✨ 体验</option>
                         </select>
-                        ${makePrintCell(item.category)}
+                        ${makePrintCell(item.category, `pv_issue_category_${index}`)}
                     </td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.desc)}</textarea>${makePrintCell(item.desc)}</td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'impact', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.impact)}</textarea>${makePrintCell(item.impact)}</td>
-                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.support)}</textarea>${makePrintCell(item.support)}</td>
-                    <td class="p-2.5 text-center no-print"><button onclick="removeKPI(${index})" class="text-slate-400 hover:text-rose-600 p-1.5 transition" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.desc)}</textarea>${makePrintCell(item.desc, `pv_issue_desc_${index}`)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'impact', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.impact)}</textarea>${makePrintCell(item.impact, `pv_issue_impact_${index}`)}</td>
+                    <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.support)}</textarea>${makePrintCell(item.support, `pv_issue_support_${index}`)}</td>
+                    <td class="p-2.5 text-center no-print"><button onclick="removeIssue(${index})" class="text-slate-400 hover:text-rose-600 p-1.5 transition" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -963,6 +979,7 @@
 
         function updateIssue(index, field, value) {
             appData.issueList[index][field] = value;
+            updatePrintCell(`pv_issue_${field}_${index}`, value);
             autoSaveData();
         }
 
