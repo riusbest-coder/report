@@ -412,7 +412,7 @@
 
     <!-- Reference Modal -->
     <div id="referenceModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden no-print">
-        <div class="bg-white border border-slate-200 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-5xl w-full max-h-[85vh] flex flex-col shadow-2xl">
             <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50 rounded-t-2xl">
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-book-open text-brand-blue text-lg"></i>
@@ -424,33 +424,163 @@
             </div>
             
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 text-xs text-slate-700">
+                <!-- BẢNG 1: 实施岗 KPI -->
                 <div>
                     <h4 class="text-xs sm:text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-user-gear"></i>
-                        <span>实施岗 KPI</span>
+                        <span>实施岗 KPI — 数据参考</span>
                     </h4>
                     <div class="overflow-x-auto border border-slate-200 rounded-lg">
-                        <table class="w-full text-left min-w-[500px]">
-                            <thead class="bg-slate-100 text-slate-800 font-bold">
+                        <table class="w-full text-left min-w-[650px]">
+                            <thead class="bg-slate-100 text-slate-800 font-bold border-b border-slate-200">
                                 <tr>
-                                    <th class="p-2 border-b border-slate-200">KPI指标</th>
-                                    <th class="p-2 border-b border-slate-200">定义</th>
-                                    <th class="p-2 border-b border-slate-200">衡量标准</th>
-                                    <th class="p-2 border-b border-slate-200 w-16">权重</th>
+                                    <th class="p-2.5 border-r border-slate-200 w-[15%]">KPI</th>
+                                    <th class="p-2.5 border-r border-slate-200 w-[28%]">指标定义</th>
+                                    <th class="p-2.5 border-r border-slate-200 w-[47%]">衡量标准</th>
+                                    <th class="p-2.5 w-[10%] text-center">权重</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-200 bg-white">
                                 <tr>
-                                    <td class="p-2 font-semibold text-slate-900">演示目标</td>
-                                    <td class="p-2">国内每日2个，海外每日1个</td>
-                                    <td class="p-2">100%≤实际完成: 100分 | 85%-99%: 80分 | 70%-84%: 50分 | ≤69%: 0分</td>
-                                    <td class="p-2 text-brand-blue font-bold">15%</td>
+                                    <td class="p-2.5 font-semibold text-slate-900 border-r border-slate-200">演示目标</td>
+                                    <td class="p-2.5 border-r border-slate-200">国内实施每日2个，海外实施每日1个</td>
+                                    <td class="p-2.5 border-r border-slate-200 leading-relaxed">
+                                        • 100% ≤ 实际完成度 得分100<br>
+                                        • 85% ≤ 实际完成演示量 ≤ 99% 得分80<br>
+                                        • 70% ≤ 实际完成演示量 ≤ 84% 得分50<br>
+                                        • 69% ≥ 实际完成演示量 得分0<br>
+                                        • 如果问卷回收低于60%或是有差评，减10分
+                                    </td>
+                                    <td class="p-2.5 text-center text-brand-blue font-bold">15%</td>
                                 </tr>
                                 <tr>
-                                    <td class="p-2 font-semibold text-slate-900">日活转化率目标</td>
-                                    <td class="p-2">完成 DAU 转化率目标</td>
-                                    <td class="p-2">东南亚、巴西: ≥30%: 100分 | 25-29%: 85分</td>
-                                    <td class="p-2 text-brand-blue font-bold">20%</td>
+                                    <td class="p-2.5 font-semibold text-slate-900 border-r border-slate-200">日活转化率目标</td>
+                                    <td class="p-2.5 border-r border-slate-200">完成日活转化率目标</td>
+                                    <td class="p-2.5 border-r border-slate-200 leading-relaxed">
+                                        <strong>东南亚、巴西日活转化：</strong><br>
+                                        • 30% ≤ 日活转化率 得分100<br>
+                                        • 25% ≤ 日活转化率 ≤ 29% 得分85<br>
+                                        • 20% ≤ 日活转化率 ≤ 24% 得分70<br>
+                                        • 19% ≤ 日活转化率 得分55<br>
+                                        <strong>其他区域日活转化：</strong><br>
+                                        • 20% ≤ 日活转化率 得分100<br>
+                                        • 15% ≤ 日活转化率 ≤ 19% 得分85<br>
+                                        • 10% ≤ 日活转化率 ≤ 14% 得分55<br>
+                                        • 9% ≥ 日活转化率 得分0<br>
+                                        • 如果因服务流程问题导致客户拒绝付费，减分10
+                                    </td>
+                                    <td class="p-2.5 text-center text-brand-blue font-bold">20%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-semibold text-slate-900 border-r border-slate-200">售后跟进</td>
+                                    <td class="p-2.5 border-r border-slate-200">
+                                        用户使用跟进：<br>
+                                        • SA级用户每月出1次用户使用报告，其他等级用户每个季度出一次（S级：至尊版、尊享版；A级：旗舰版）<br>
+                                        • Y=用户流失：客户套餐到期（时效到期/单量用完）、套餐未消耗完就放弃使用系统（超过7天暂停登录）<br>
+                                        • 排除仓库因业务问题倒闭不使用的因素
+                                    </td>
+                                    <td class="p-2.5 border-r border-slate-200 leading-relaxed">
+                                        • 按时按量完成 得分100<br>
+                                        • 差3次（每个用户每个周期为1次）未完成 得分80<br>
+                                        • 差3-5次未完成 得分60<br>
+                                        • 差6次以上未完成 得分0<br>
+                                        • 如果出现用户流失，每流失一个减30分
+                                    </td>
+                                    <td class="p-2.5 text-center text-brand-blue font-bold">35%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-semibold text-slate-900 border-r border-slate-200">学习提效</td>
+                                    <td class="p-2.5 border-r border-slate-200">
+                                        学习提效分 = X + Y<br>
+                                        • X = 所有考核成绩平均分<br>
+                                        • Y = 完成帮助文档，并培训分享
+                                    </td>
+                                    <td class="p-2.5 border-r border-slate-200 leading-relaxed">
+                                        • 所有考核成绩平均分 ≤ 96，得分50<br>
+                                        • 90 ≤ 所有考核成绩平均分 ≤ 95，得分40<br>
+                                        • 80 ≤ 所有考核成绩平均分 ≤ 89，得分30<br>
+                                        • 79 ≤ 所有考核成绩平均分，得分20<br>
+                                        • Y = 完成帮助文档，并培训分享（按时按量完成，得分50。1次未按时完成，得分30。2次及以上未完成，得分20。）<br>
+                                        • Q = QA每周反馈（符合要求按时按量提交，Q=10分；按时但出现2次内不符合质量的情况，Q=8分；符合质量但是出现1次不按时提交，Q=8分；超过3次及以上不符合质量，2次及以上不按时提交，Q=5分；超过4次及以上不符合质量，3次及以上不按时提交 Q=0分。）
+                                    </td>
+                                    <td class="p-2.5 text-center text-brand-blue font-bold">20%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- BẢNG 2: 售后岗 KPI -->
+                <div>
+                    <h4 class="text-xs sm:text-sm font-bold text-brand-blue mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-headset"></i>
+                        <span>售后岗 KPI — 数据参考</span>
+                    </h4>
+                    <div class="overflow-x-auto border border-slate-200 rounded-lg">
+                        <table class="w-full text-left min-w-[650px]">
+                            <thead class="bg-slate-100 text-slate-800 font-bold border-b border-slate-200">
+                                <tr>
+                                    <th class="p-2.5 border-r border-slate-200 w-[15%]">KPI</th>
+                                    <th class="p-2.5 border-r border-slate-200 w-[28%]">指标定义</th>
+                                    <th class="p-2.5 border-r border-slate-200 w-[47%]">衡量标准</th>
+                                    <th class="p-2.5 w-[10%] text-center">权重</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 bg-white">
+                                <tr>
+                                    <td class="p-2.5 font-semibold text-slate-900 border-r border-slate-200">响应效率1</td>
+                                    <td class="p-2.5 border-r border-slate-200">
+                                        首响得分 = X*60% + Y*40%<br>
+                                        • X = 个人季度内日平均首响90s<br>
+                                        • Y = 首响超过90s的天数
+                                    </td>
+                                    <td class="p-2.5 border-r border-slate-200 leading-relaxed">
+                                        • X = 个人季度内日平均首响：X ≤ 90s, X=10分; 91s ≤ X ≤ 120s, X=8分; 121s ≤ X, X=4分。<br>
+                                        • Y = 首响超过120s的天数：Y=0天，得分10分; 1 ≤ Y ≤ 6天，得分8分; 7 ≤ Y，得分4分。
+                                    </td>
+                                    <td class="p-2.5 text-center text-brand-blue font-bold">10%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-semibold text-slate-900 border-r border-slate-200">响应效率2</td>
+                                    <td class="p-2.5 border-r border-slate-200">
+                                        响应过程得分 = X*70% + Y*30%<br><br>
+                                        • X = 季度内七鱼日均在线时长 / 季度在线总时长 / 出勤天数<br><br>
+                                        • Y = 季度内远程协助次数（给客户通过线上会议、语音等形式协助客户处理问题）
+                                    </td>
+                                    <td class="p-2.5 border-r border-slate-200 leading-relaxed">
+                                        • X = 季度内七鱼日均在线时长：X ≥ 8h, 得分10分; 7.3h ≤ X ≤ 7.9h, 得分8分; 6.9h ≤ X ≤ 7.2h, 得分6分; X ≤ 6.8h, 得分4分。<br>
+                                        • Y = 远程协助次数：Y ≥ 36次, 得分10分; 20 ≤ Y ≤ 35次, 得分8分; 10 ≤ Y ≤ 19次, 得分5分; 4 ≤ Y ≤ 9次, 得分3分; Y ≤ 3次, 得分0分。<br>
+                                        • 出现付费排队超5分钟超过5个，总分减20%（排除集体性问题出现，导致大量消息涌入产生的排队）
+                                    </td>
+                                    <td class="p-2.5 text-center text-brand-blue font-bold">25%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-semibold text-slate-900 border-r border-slate-200">回复质量</td>
+                                    <td class="p-2.5 border-r border-slate-200">有效的快速解决客户问题</td>
+                                    <td class="p-2.5 border-r border-slate-200 leading-relaxed">
+                                        • 本项满分10分<br>
+                                        ① 能理解客户的诉求，并准确回复<br>
+                                        ② 禁止扯皮，一个问题沟通1个小时以上仍然未给出解决方案<br>
+                                        ③ 不看聊天记录让客户重复描述问题<br>
+                                        ④ 反馈的问题，当日闭环，有解决方案就反馈给客户，没有解决方案下班前同步客户处理进度<br>
+                                        • 以上问题，每出现一次，扣1分
+                                    </td>
+                                    <td class="p-2.5 text-center text-brand-blue font-bold">25%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-semibold text-slate-900 border-r border-slate-200">学习提效</td>
+                                    <td class="p-2.5 border-r border-slate-200">
+                                        学习提效分 = X*50% + Q*40% + Y*10%<br>
+                                        • X = 所有考核成绩平均分<br>
+                                        • Y = 帮助文档维护<br>
+                                        • Q = QA每周反馈
+                                    </td>
+                                    <td class="p-2.5 border-r border-slate-200 leading-relaxed">
+                                        • X = 所有考核成绩平均分：所有考核成绩平均分 ≤ 96, X=10分; 88 ≤ 所有考核成绩平均分 ≤ 95, X=8分; 80 ≤ 所有考核成绩平均分 ≤ 87, X=7分; 79 ≤ 所有考核成绩平均分, X=5分。<br>
+                                        • Y = 帮助文档维护：抽查内容没有错误，不被客户投诉帮助文档有问题（0问题，得分10分; 1-2个问题，得分6分; 3个问题及以上，得分0分）。<br>
+                                        • Q = QA每周反馈（针对客户常见咨询，整理QA，有清晰的问题描述、解决步骤，不能有错别字，每周按时按量提供）：符合要求按时按量提交，Q=10分; 按时但出现2次内不符合质量的情况，Q=8分; 符合质量但是出现1次不按时提交，Q=8分; 超过3次及以上不符合质量，2次及以上不按时提交，Q=5分; 超过4次及以上不符合质量，3次及以上不按时提交，Q=0分。
+                                    </td>
+                                    <td class="p-2.5 text-center text-brand-blue font-bold">30%</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -819,7 +949,7 @@
                     <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'desc', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.desc)}</textarea>${makePrintCell(item.desc)}</td>
                     <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'impact', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.impact)}</textarea>${makePrintCell(item.impact)}</td>
                     <td class="p-2.5"><textarea rows="1" oninput="autoExpand(this); updateIssue(${index}, 'support', this.value)" class="auto-expand w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:bg-white focus:border-brand-blue focus:outline-none transition">${escapeHtml(item.support)}</textarea>${makePrintCell(item.support)}</td>
-                    <td class="p-2.5 text-center no-print"><button onclick="removeIssue(${index})" class="text-slate-400 hover:text-rose-600 p-1.5 transition" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
+                    <td class="p-2.5 text-center no-print"><button onclick="removeKPI(${index})" class="text-slate-400 hover:text-rose-600 p-1.5 transition" title="删除"><i class="fa-solid fa-trash-can"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
