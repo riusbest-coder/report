@@ -1,0 +1,7 @@
+{
+  "name": "report",
+  "main": "src/index.js",
+  "assets": {
+    "directory": "./"
+  }
+}
