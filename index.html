@@ -756,7 +756,8 @@
                                     target: String(r['目标值'] || r['target'] || '').trim(),
                                     actual: String(r['实际完成值'] || r['actual'] || '').trim(),
                                     rate: isNaN(numericRate) ? 0 : numericRate,
-                                    desc: String(r['偏差说明'] || r['desc'] || '').trim()
+                                    // Đã bổ sung đọc thêm các cột: 偏差说明 / 改进动作, 偏差说明, 改进动作
+                                    desc: String(r['偏差说明 / 改进动作'] || r['偏差说明/改进动作'] || r['偏差说明'] || r['改进动作'] || r['说明'] || r['desc'] || '').trim()
                                 };
                             }).filter(item => item.name !== '');
                         } 
@@ -1113,24 +1114,4 @@
             autoSaveData();
         }
 
-        function updateIssue(index, field, value) {
-            appData.issueList[index][field] = value;
-            updatePrintCell(`pv_issue_${field}_${index}`, value);
-            autoSaveData();
-        }
-
-        function removeIssue(index) {
-            appData.issueList.splice(index, 1);
-            renderIssues();
-            autoSaveData();
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-
-        window.addEventListener('resize', triggerAllAutoExpand);
-    </script>
-</body>
-</html>
+        function updateIssue(index
