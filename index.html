@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SheetJS (XLSX) cho chức năng đọc file Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -144,19 +146,26 @@
                 </div>
 
                 <!-- Right Actions & Auto-save Status -->
-                <div class="flex items-center space-x-3 sm:space-x-4">
+                <div class="flex items-center space-x-2 sm:space-x-3">
                     <div class="hidden sm:flex items-center space-x-1.5 text-xs text-emerald-600 font-semibold bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200" id="headerSaveStatus">
                         <i class="fa-solid fa-circle-check"></i>
                         <span>已实时保存</span>
                     </div>
 
+                    <!-- NÚT NHẬP DỮ LIỆU TỪ FILE EXCEL -->
+                    <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="handleExcelImport(event)">
+                    <button onclick="document.getElementById('excelFileInput').click()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-indigo-600/20 shrink-0" title="Lấy dữ liệu từ file Excel">
+                        <i class="fa-solid fa-file-import"></i>
+                        <span>导入 Excel</span>
+                    </button>
+
                     <!-- NÚT LƯU VÀO GOOGLE SHEET / EXCEL -->
-                    <button onclick="saveToGoogleSheet()" id="btnSaveExcel" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-emerald-600/20 shrink-0">
+                    <button onclick="saveToGoogleSheet()" id="btnSaveExcel" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-emerald-600/20 shrink-0">
                         <i class="fa-solid fa-file-excel"></i>
                         <span>记录Excel</span>
                     </button>
 
-                    <button onclick="printAllTabs()" class="px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-brand-blue/20 shrink-0">
+                    <button onclick="printAllTabs()" class="px-3.5 py-2 bg-brand-blue hover:bg-blue-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow-lg shadow-brand-blue/20 shrink-0">
                         <i class="fa-solid fa-file-pdf"></i>
                         <span>打印 / 导出 PDF</span>
                     </button>
@@ -710,9 +719,100 @@
             modal.classList.toggle('hidden');
         }
 
+        // ==================== XỬ LÝ NHẬP EXCEL (KHỚP FILE 记录EXCEL) ====================
+        function handleExcelImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+
+                    let importedData = {
+                        kpiList: [],
+                        customerList: [],
+                        taskList: [],
+                        issueList: []
+                    };
+
+                    workbook.SheetNames.forEach(sheetName => {
+                        const worksheet = workbook.Sheets[sheetName];
+                        const json = XLSX.utils.sheet_to_json(worksheet);
+                        const sName = sheetName.trim().toLowerCase();
+
+                        // 1. Sheet KPI
+                        if (sName === 'kpi' || sName.includes('kpi') || sName.includes('绩效')) {
+                            importedData.kpiList = json.map(r => {
+                                let rawRate = r['达成进度'] !== undefined ? r['达成进度'] : (r['rate'] || 0);
+                                // Chuyển đổi % nếu dạng thập phân (ví dụ 0.95 -> 95)
+                                let numericRate = parseFloat(rawRate);
+                                if (numericRate > 0 && numericRate <= 1 && String(rawRate).includes('.')) {
+                                    numericRate = Math.round(numericRate * 100);
+                                }
+                                return {
+                                    name: String(r['指标名称'] || r['name'] || '').trim(),
+                                    target: String(r['目标值'] || r['target'] || '').trim(),
+                                    actual: String(r['实际完成值'] || r['actual'] || '').trim(),
+                                    rate: isNaN(numericRate) ? 0 : numericRate,
+                                    desc: String(r['偏差说明'] || r['desc'] || '').trim()
+                                };
+                            }).filter(item => item.name !== '');
+                        } 
+                        // 2. Sheet Customer
+                        else if (sName === 'customer' || sName.includes('customer') || sName.includes('客户')) {
+                            importedData.customerList = json.map(r => ({
+                                name: String(r['客户名称'] || r['name'] || '').trim(),
+                                profile: String(r['客户画像'] || r['profile'] || '').trim(),
+                                status: String(r['最新动态'] || r['status'] || '').trim(),
+                                chance: String(r['付费转化机会点'] || r['chance'] || '').trim()
+                            })).filter(item => item.name !== '');
+                        } 
+                        // 3. Sheet Task
+                        else if (sName === 'task' || sName.includes('task') || sName.includes('工作')) {
+                            importedData.taskList = json.map(r => ({
+                                title: String(r['重点工作说明'] || r['title'] || '').trim(),
+                                target: String(r['目标/交付物'] || r['目标'] || r['target'] || '').trim(),
+                                support: String(r['需求支持/协同'] || r['需求支持'] || r['support'] || '').trim()
+                            })).filter(item => item.title !== '');
+                        } 
+                        // 4. Sheet Issue
+                        else if (sName === 'issue' || sName.includes('issue') || sName.includes('问题')) {
+                            importedData.issueList = json.map(r => ({
+                                category: String(r['问题分类'] || r['category'] || '系统').trim(),
+                                desc: String(r['问题描述'] || r['desc'] || '').trim(),
+                                impact: String(r['影响与已尝试措施'] || r['impact'] || '').trim(),
+                                support: String(r['需协调/支持事项'] || r['support'] || '').trim()
+                            })).filter(item => item.desc !== '');
+                        }
+                    });
+
+                    // Cập nhật dữ liệu vào appData
+                    let updated = false;
+                    if (importedData.kpiList.length > 0) { appData.kpiList = importedData.kpiList; updated = true; }
+                    if (importedData.customerList.length > 0) { appData.customerList = importedData.customerList; updated = true; }
+                    if (importedData.taskList.length > 0) { appData.taskList = importedData.taskList; updated = true; }
+                    if (importedData.issueList.length > 0) { appData.issueList = importedData.issueList; updated = true; }
+
+                    if (updated) {
+                        renderAll();
+                        autoSaveData();
+                        alert('导入 Excel 成功！/ Nhập dữ liệu file Excel thành công!');
+                    } else {
+                        alert('未能识别 Excel 中的数据格式，请确保 Excel 包含 KPI, Customer, Task, Issue 等 Sheet 页和正确的列名。');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('读取 Excel 文件出错！/ Lỗi khi đọc file Excel!');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+            event.target.value = ''; // Clear file input
+        }
+
         // ==================== XUẤT PDF / IN ÉP MỖI TAB 1 TRANG ====================
         function printAllTabs() {
-            // Thêm style ngắt trang tức thời
             let styleEl = document.getElementById('force-page-break-style');
             if (!styleEl) {
                 styleEl = document.createElement('style');
@@ -735,7 +835,6 @@
 
             setTimeout(() => {
                 window.print();
-                // Dọn dẹp sau khi in xong
                 styleEl.innerHTML = '';
                 document.querySelectorAll('.tab-content').forEach(tab => {
                     if (tab.id !== currentActiveTab) {
@@ -771,7 +870,7 @@
             if (el) el.innerText = val;
         }
 
-        // ==================== LƯU GOOGLE SHEET ====================
+        // ==================== LƯU GOOGLE SHEET / XUẤT EXCEL ====================
         function saveToGoogleSheet() {
             const btn = document.getElementById('btnSaveExcel');
             const originalText = btn.innerHTML;
@@ -798,7 +897,7 @@
             });
         }
 
-        // ==================== KPI ====================
+        // ==================== RENDER KPI ====================
         function renderKPI() {
             const tbody = document.getElementById('kpiTableBody');
             tbody.innerHTML = '';
@@ -895,7 +994,7 @@
             autoSaveData();
         }
 
-        // ==================== CUSTOMERS ====================
+        // ==================== RENDER CUSTOMERS ====================
         function renderCustomers() {
             const tbody = document.getElementById('customerTableBody');
             tbody.innerHTML = '';
@@ -939,7 +1038,7 @@
             autoSaveData();
         }
 
-        // ==================== TASKS ====================
+        // ==================== RENDER TASKS ====================
         function renderTasks() {
             const tbody = document.getElementById('taskTableBody');
             tbody.innerHTML = '';
@@ -978,7 +1077,7 @@
             autoSaveData();
         }
 
-        // ==================== ISSUES ====================
+        // ==================== RENDER ISSUES ====================
         function renderIssues() {
             const tbody = document.getElementById('issueTableBody');
             tbody.innerHTML = '';
