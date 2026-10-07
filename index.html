@@ -719,7 +719,7 @@
             modal.classList.toggle('hidden');
         }
 
-        // ==================== XỬ LÝ NHẬP EXCEL (KHỚP FILE 记录EXCEL) ====================
+        // ==================== XỬ LÝ NHẬP EXCEL (ĐÃ SỬA LỖI ĐỌC CỘT 偏差说明) ====================
         function handleExcelImport(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -737,54 +737,78 @@
                         issueList: []
                     };
 
+                    // Hàm phụ trợ: Chuẩn hóa key (xóa toàn bộ khoảng trắng, ký tự đặc biệt)
+                    const cleanKey = (k) => String(k || '').replace(/[\s\r\n\t\/\\_\-]/g, '').toLowerCase();
+
+                    // Hàm phụ trợ: Lấy giá trị từ object bằng mảng các từ khóa
+                    const getValueByKeys = (rowObj, targetKeys) => {
+                        for (let key of Object.keys(rowObj)) {
+                            const cKey = cleanKey(key);
+                            for (let tk of targetKeys) {
+                                if (cKey.includes(cleanKey(tk))) {
+                                    return rowObj[key];
+                                }
+                            }
+                        }
+                        return '';
+                    };
+
                     workbook.SheetNames.forEach(sheetName => {
                         const worksheet = workbook.Sheets[sheetName];
                         const json = XLSX.utils.sheet_to_json(worksheet);
-                        const sName = sheetName.trim().toLowerCase();
+                        const sName = cleanKey(sheetName);
 
                         // 1. Sheet KPI
-                        if (sName === 'kpi' || sName.includes('kpi') || sName.includes('绩效')) {
+                        if (sName.includes('kpi') || sName.includes('绩效')) {
                             importedData.kpiList = json.map(r => {
-                                let rawRate = r['达成进度'] !== undefined ? r['达成进度'] : (r['rate'] || 0);
+                                let rawName = getValueByKeys(r, ['指标名称', 'name', '指标']);
+                                let rawTarget = getValueByKeys(r, ['目标值', 'target', '目标']);
+                                let rawActual = getValueByKeys(r, ['实际完成值', 'actual', '实际']);
+                                let rawRate = getValueByKeys(r, ['达成进度', 'rate', '进度', '达成率']);
+                                // Sửa lỗi quan trọng: Lấy trường 偏差说明 / 改进动作
+                                let rawDesc = getValueByKeys(r, ['偏差说明', '改进动作', 'desc', '说明', '原因']);
+
                                 // Chuyển đổi % nếu dạng thập phân (ví dụ 0.95 -> 95)
                                 let numericRate = parseFloat(rawRate);
-                                if (numericRate > 0 && numericRate <= 1 && String(rawRate).includes('.')) {
+                                if (!isNaN(numericRate) && numericRate > 0 && numericRate <= 1 && String(rawRate).includes('.')) {
                                     numericRate = Math.round(numericRate * 100);
+                                } else if (isNaN(numericRate)) {
+                                    numericRate = 0;
                                 }
+
                                 return {
-                                    name: String(r['指标名称'] || r['name'] || '').trim(),
-                                    target: String(r['目标值'] || r['target'] || '').trim(),
-                                    actual: String(r['实际完成值'] || r['actual'] || '').trim(),
-                                    rate: isNaN(numericRate) ? 0 : numericRate,
-                                    // Đã bổ sung đọc thêm các cột: 偏差说明 / 改进动作, 偏差说明, 改进动作
-                                    desc: String(r['偏差说明 / 改进动作'] || r['偏差说明/改进动作'] || r['偏差说明'] || r['改进动作'] || r['说明'] || r['desc'] || '').trim()
+                                    name: String(rawName || '').trim(),
+                                    target: String(rawTarget || '').trim(),
+                                    actual: String(rawActual || '').trim(),
+                                    rate: numericRate,
+                                    desc: String(rawDesc || '').trim()
                                 };
                             }).filter(item => item.name !== '');
                         } 
                         // 2. Sheet Customer
-                        else if (sName === 'customer' || sName.includes('customer') || sName.includes('客户')) {
+                        else if (sName.includes('customer') || sName.includes('客户')) {
                             importedData.customerList = json.map(r => ({
-                                name: String(r['客户名称'] || r['name'] || '').trim(),
-                                profile: String(r['客户画像'] || r['profile'] || '').trim(),
-                                status: String(r['最新动态'] || r['status'] || '').trim(),
-                                chance: String(r['付费转化机会点'] || r['chance'] || '').trim()
+                                name: String(getValueByKeys(r, ['客户名称', 'name', '客户']) || '').trim(),
+                                profile: String(getValueByKeys(r, ['客户画像', 'profile', '画像']) || '').trim(),
+                                status: String(getValueByKeys(r, ['最新动态', 'status', '动态']) || '').trim(),
+                                chance: String(getValueByKeys(r, ['付费转化机会点', 'chance', '转化', '机会点']) || '').trim()
                             })).filter(item => item.name !== '');
                         } 
                         // 3. Sheet Task
-                        else if (sName === 'task' || sName.includes('task') || sName.includes('工作')) {
+                        else if (sName.includes('task') || sName.includes('工作')) {
                             importedData.taskList = json.map(r => ({
-                                title: String(r['重点工作说明'] || r['title'] || '').trim(),
-                                target: String(r['目标/交付物'] || r['目标'] || r['target'] || '').trim(),
-                                support: String(r['需求支持/协同'] || r['需求支持'] || r['support'] || '').trim()
+                                title: String(getValueByKeys(r, ['重点工作说明', 'title', '工作说明', '重点工作']) || '').trim(),
+                                target: String(getValueByKeys(r, ['目标/交付物', '目标', '交付物', 'target']) || '').trim(),
+                                support: String(getValueByKeys(r, ['需求支持/协同', '需求支持', '协同', 'support']) || '').trim()
                             })).filter(item => item.title !== '');
                         } 
                         // 4. Sheet Issue
-                        else if (sName === 'issue' || sName.includes('issue') || sName.includes('问题')) {
+                        else if (sName.includes('issue') || sName.includes('问题')) {
                             importedData.issueList = json.map(r => ({
-                                category: String(r['问题分类'] || r['category'] || '系统').trim(),
-                                desc: String(r['问题描述'] || r['desc'] || '').trim(),
-                                impact: String(r['影响与已尝试措施'] || r['impact'] || '').trim(),
-                                support: String(r['需协调/支持事项'] || r['support'] || '').trim()
+                                category: String(getValueByKeys(r, ['问题分类', 'category', '分类']) || '系统').trim(),
+                                desc: String(getValueByKeys(r, ['问题描述', 'desc', '描述']) || '').trim(),
+                                impact: String(getValueByKeys(r, ['影响与已尝试措施', 'impact', '影响']) || '').trim(),
+                                support: String(getValueByKeys(r, ['需协调/支持事项', 'support', '协调', '支持']) || '').trim()
                             })).filter(item => item.desc !== '');
                         }
                     });
@@ -1114,4 +1138,24 @@
             autoSaveData();
         }
 
-        function updateIssue(index
+        function updateIssue(index, field, value) {
+            appData.issueList[index][field] = value;
+            updatePrintCell(`pv_issue_${field}_${index}`, value);
+            autoSaveData();
+        }
+
+        function removeIssue(index) {
+            appData.issueList.splice(index, 1);
+            renderIssues();
+            autoSaveData();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        window.addEventListener('resize', triggerAllAutoExpand);
+    </script>
+</body>
+</html>
